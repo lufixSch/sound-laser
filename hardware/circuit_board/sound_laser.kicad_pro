@@ -389,11 +389,11 @@
   "pcbnew": {
     "last_paths": {
       "gencad": "",
-      "idf": "",
+      "idf": "../models/circuit_board.emn",
       "netlist": "",
       "specctra_dsn": "",
       "step": "../models/circuit_board.STEP",
-      "vrml": ""
+      "vrml": "../models/circuit_board.wrl"
     },
     "page_layout_descr_file": ""
   },
