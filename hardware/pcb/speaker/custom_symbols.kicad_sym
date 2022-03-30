@@ -74,7 +74,7 @@
       )
     )
     (symbol "LTC2631-Z_1_1"
-      (pin input line (at -10.16 5.08 0) (length 2.54)
+      (pin passive line (at -10.16 5.08 0) (length 2.54)
         (name "CA0" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
       )
@@ -102,7 +102,7 @@
         (name "VOUT" (effects (font (size 1.27 1.27))))
         (number "7" (effects (font (size 1.27 1.27))))
       )
-      (pin input line (at -10.16 2.54 0) (length 2.54)
+      (pin passive line (at -10.16 2.54 0) (length 2.54)
         (name "CA1" (effects (font (size 1.27 1.27))))
         (number "8" (effects (font (size 1.27 1.27))))
       )
