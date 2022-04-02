@@ -1,0 +1,56 @@
+\renewcommand{\familydefault}{\sfdefault}
+\normalfont
+
+%%%%% Now we add YOUR Personal DATA %%%%%
+%%%%% What you enter here, will be written to the variables used within this document !! %%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% ACCORDING TO YOUR degree programme and desired language the titlepage should be created automatically %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\DocTypeText}{Bachelor's Thesis}
+\newcommand{\OrgaText}{Elektronik und Computer Engineering}
+\newcommand{\degType}{at the bachelor's degree programme}
+\newcommand{\ThesisDate}{\today} %Place and the generated date
+
+\newcommand{\ThesisLineOne}{\degType ~\OrgaText}
+\newcommand{\ThesisLineTwo}{of the FH JOANNEUM -- University of Applied Sciences, Austria}
+
+\newcommand{\bcol}{DENcol}
+\newcommand{\tcol}{white}
+
+\thispagestyle{empty}
+%
+%====== Create Sizes For Title what so ever ====== %
+\newcommand{\MainTitlesize}{\bf\fontsize{24}{24}\selectfont}
+\newcommand{\SubTitlesize}{\bf\fontsize{16}{16}\selectfont}
+\newcommand{\Namesize}{\bf\fontsize{14}{14}\selectfont}
+
+\newcommand{\shadowtitle}{\shadowcolor{black}\shadowoffset{0pt}}
+
+\begin{tikzpicture}[overlay]
+
+\node (Logo) at (17cm,-0.9) [anchor = east] {\includegraphics[scale = 1.1]{src/assets/pictures/logo_FHJ_ECE_white.eps}};
+
+%% ===== CREATE background ===== %%
+% Background Box
+\node (boxOne)  at (6.5 cm,-12.5) [] {\includegraphics[scale = 0.75]{src/assets/pictures/titleBacking.eps}};
+\node (ThesisTitle) [color = \tcol, font = \MainTitlesize, align = flush right, anchor = north east] at (16,-4){\shadowtitle\shadowtext{\thesisTitle}};%
+
+\node (ThesisSubtitle) [color = \tcol, font = \SubTitlesize, align = flush right, anchor = north east] at ($(ThesisTitle.south east) + (0,-0.25em)$){\shadowtitle\shadowtext{\thesisSubtitle}};
+
+\node (ThesisType) [color = \tcol, font = \SubTitlesize, align = flush right, anchor = north east] at ($(ThesisSubtitle.south east) + (0,-3em)$){\shadowtitle\shadowtext{\DocTypeText}};
+
+\node (AuthName) [color = \tcol, font = \large, align = flush right, anchor = north east] at ($(ThesisType.south east) + (0,-2em)$){\shadowtitle\shadowtext{\bf{written by:}} \\ \shadowtitle\shadowtext{\author}};
+
+\node (Organization) [color = \tcol, font = \Large, align = flush right, anchor = north east] at ($(AuthName.south east) + (0,-3.5em)$){\shadowtitle\shadowtext{\ThesisLineOne} \\ \shadowtitle\shadowtext{\ThesisLineTwo}};
+
+\node (Supervisor) [color = \tcol, font = \large, align = flush right, anchor = north east] at ($(Organization.south east) + (0,-3em)$){\shadowtitle\shadowtext{\bf{supervised by:}} \\ \shadowtitle\shadowtext{\supervisor}};
+
+\node (ThesisDate) [color = \tcol, font = \large, align = flush right, anchor = north east] at ($(Supervisor.south east) + (0,-3em)$){\shadowtitle\shadowtext{\bf{Graz, \ThesisDate}}};
+
+%\node (SpecialNote) [color = \tcol, font = \large, align = center, anchor = north east] at ($(ThesisDate.south east) + (0,-3em)$){\begin{varwidth}{14cm} \shadowtitle\shadowtext{\SpecialNote} \end{varwidth}};
+
+\end{tikzpicture}
+
+\renewcommand{\familydefault}{\WorkingFont}
+\normalfont

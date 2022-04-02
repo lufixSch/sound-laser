@@ -1,0 +1,170 @@
+\input{src/config/imports.tex}
+
+%# Page layout ------------------------------------------------------------------------
+\geometry{a4paper,twoside,%
+	%textheight=205mm, %246mm,%
+	textwidth=160mm,%
+	top = 3cm,
+	bottom = 4.5cm,
+	heightrounded=false,% round textheight to multiple of lines (avoids overfull vboxes)
+	ignoreall=true,% do not include header, footer, and margins in calculations
+	marginparsep=5pt,% marginpar only used for signs (centered), thus only small sep. needed
+	marginparwidth=10mm,% prevent margin notes to be out of page
+	hmarginratio=1:2,
+	voffset = 2.25mm,
+	%headheight = 16mm,
+	headsep = 9mm,
+	footskip = 13mm
+}
+
+\linespread{1.4}
+
+%% CLEAR DOUBLE-PAGE
+% redefine cleardoublepage...
+\makeatletter
+\renewcommand{\cleardoublepage}{\clearpage\if@twoside\ifodd\c@page\else\thispagestyle{plain}\hbox{}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+% ...and define empty double page (e.g., for title sheet)
+\newcommand{\emptydoublepage}{\clearpage\if@twoside\ifodd\c@page\else\thispagestyle{empty}\hbox{}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}%
+% ...and also an empty single page
+\newcommand{\emptypage}{\clearpage\thispagestyle{empty}\hbox{}\newpage\if@twocolumn\hbox{}\newpage\fi}%
+\makeatother
+
+%%%%% Correct Even and Odd Pages %%%%%
+\let\tmp\oddsidemargin
+\let\oddsidemargin\evensidemargin
+\let\evensidemargin\tmp
+\reversemarginpar
+
+%# Font Configuration ------------------------------------------------------------------------
+\newcommand{\ChapterFont}{qag}
+\newcommand{\WorkingFont}{\rmdefault}
+\renewcommand{\familydefault}{\WorkingFont}
+\normalfont
+
+\renewcommand{\cftchapfont}{\bf\large\fontfamily{\sfdefault}\selectfont}
+\renewcommand{\cftpartfont}{\bf\large\fontfamily{\sfdefault}\selectfont}
+
+%# Headings ------------------------------------------------------------------------
+
+\renewcommand*\chaptermark[1]{\markleft{\thechapter~#1}}
+\renewcommand*\sectionmark[1]{\markright{\thesection~#1}}
+
+\clearpairofpagestyles
+\ohead[\ShortTitle]{\footnotesize\headmark}%
+
+\ofoot[\ifthenelse{\equal{\thepage}{}}{\pagemark}{--~~\pagemark~~--}]{\ifthenelse{\equal{\thepage}{}}{\pagemark}{--~~\pagemark~~--}}
+
+%#-- Chapter, Section etc. ------------------------------------------------------------------------
+
+\titleformat{\part}[display]
+   {\sffamily\bfseries\fontsize{26}{26}\selectfont\filcenter}
+   {\sffamily\bfseries\fontsize{30}{22}\selectfont\partname{} \thepart}
+   {0.5em}
+   {}
+
+\titleformat{\chapter}[display]
+{\sffamily\bfseries\fontsize{22}{22}\selectfont}%\
+{
+\begin{tikzpicture}[overlay]
+	\node (CoolTitle) at (12,1) [opacity=0.325]{\includegraphics[scale=0.75]{src/assets/pictures/chapterBacking.eps}};
+	\node (titleNumber) at ($(CoolTitle)+(3,0)$) {\textcolor{black!80}{\fontfamily{\ChapterFont}\bfseries\Large\fontsize{80}{80}\selectfont\thechapter}};
+\end{tikzpicture}
+}
+{0.05em}%
+{\vspace{0.25ex}\filleft}%
+%
+\titleformat{\section}{\Large \bfseries \sffamily}{\thesection}{1 em}{}
+\titleformat{\subsection}{\large \bf \sffamily}{\thesubsection}{1 em}{}
+\titleformat{\subsubsection}{\large \bf \sffamily}{\thesubsubsection}{1 em}{}
+
+%# Setup Counter ------------------------------------------------------------------------
+\counterwithout{footnote}{chapter}
+
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+\counterwithin{equation}{section}
+\AtBeginDocument{\counterwithin{lstlisting}{section}}
+\setcounter{secnumdepth}{3}
+
+\captionsetup{font=small, labelfont=bf, labelformat=simple, justification=raggedright, singlelinecheck=false}
+
+%# Table Setup ------------------------------------------------------------------------
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.2}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+%# TikZ Configuration ------------------------------------------------------------------------
+\usetikzlibrary{matrix,calc,positioning,arrows,shapes}
+\usetikzlibrary{decorations.pathreplacing}
+
+%# Colors ------------------------------------------------------------------------
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+\definecolor{DENcol}{RGB}{35,171,196} % Department Colour
+\definecolor{DENcol10}{RGB}{245, 245, 245}
+
+%# Setup Hyperlink ------------------------------------------------------------------------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    pdfpagemode=FullScreen,
+}
+
+%# Setup Listing ------------------------------------------------------------------------
+\lstloadlanguages{Bash,VHDL,Matlab,[ANSI]C,Java,[LaTeX]TeX}
+
+\lstset{
+    frame=top,frame=bottom,
+    basicstyle=\fontsize{8}{8}\normalfont\sffamily,
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{DENcol},
+    stringstyle=\color{mPurple},            % the size of the fonts that are used for the code
+	stepnumber=1,                           % the step between two line-numbers. If it is 1 each line will be numbered
+	numbersep=6pt,                          % how far the line-numbers are from the code
+	tabsize=2,                              % tab size in blank spaces
+	extendedchars=true,                     %
+	breaklines=true,                        % sets automatic line breaking
+	captionpos=t,                           % sets the caption-position to top
+	mathescape=true,
+	stringstyle=\color{black}\ttfamily,     % Farbe der String
+	showspaces=false,                       % Leerzeichen anzeigen ?
+	showtabs=false,                         % Tabs anzeigen ?
+	xleftmargin=15pt,
+	framexleftmargin=14pt,
+	framexrightmargin=9pt,
+	framexbottommargin=9pt,
+	framextopmargin=9pt,
+	showstringspaces=false,      % Leerzeichen in Strings anzeigen ?
+	numbers = left,
+	linewidth = 150mm,
+	language=C
+}
+
+%# Setup mdframed ------------------------------------------------------------------------
+\mdfsetup{%
+middlelinecolor=red,
+middlelinewidth=2pt,
+backgroundcolor=DENcol!10,
+roundcorner=10pt,
+topline = false,
+bottomline = false,
+rightline = false,
+linecolor = DENcol,
+linewidth = 10pt}
+
+%\makeindex %create Index (Inhaltsangabe)
+%\pagestyle{fancy}
+
+%%%% GET RID OF OVERFULL BOXING WARNINGS %%%%
+%\overfullrule=5pt
+\setlength{\headheight}{1.1\baselineskip}
+\raggedbottom
+
+\input{src/config/commands.tex}
