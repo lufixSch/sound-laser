@@ -44,7 +44,7 @@
         "silk_text_thickness": 0.15239999999999998,
         "silk_text_upright": false,
         "zones": {
-          "45_degree_only": true,
+          "45_degree_only": false,
           "min_clearance": 0.127
         }
       },
@@ -390,9 +390,9 @@
     "last_paths": {
       "gencad": "",
       "idf": "../models/circuit_board.emn",
-      "netlist": "",
+      "netlist": "../../../../../../../../../../../Applications/KiCad/KiCad.app/Contents/Applications/",
       "specctra_dsn": "",
-      "step": "../models/circuit_board.STEP",
+      "step": "../../models/circuit_board.STEP",
       "vrml": "../models/circuit_board.wrl"
     },
     "page_layout_descr_file": ""
@@ -429,7 +429,7 @@
       "workbook_filename": ""
     },
     "page_layout_descr_file": "",
-    "plot_directory": "",
+    "plot_directory": "./",
     "spice_adjust_passive_values": false,
     "spice_external_command": "spice \"%I\"",
     "subpart_first_id": 65,
