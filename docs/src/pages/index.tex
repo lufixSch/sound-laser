@@ -1,12 +1,16 @@
 \frontmatter
-\input{src/pages/frontpage}\emptydoublepage
+\input{src/pages/frontpage}
+
+
 \renewcommand{\thepage}{\Roman{page}}
 %
-\tableofcontents
-\printglossary
-\listoffigures
-\listoftables
-\lstlistoflistings
+\input{src/pages/frontmater/index.tex}\emptydoublepage
+%
+\tableofcontents\emptydoublepage
+\printglossary\emptydoublepage
+\listoffigures\emptydoublepage
+\listoftables\emptydoublepage
+\lstlistoflistings\emptydoublepage
 %
 \mainmatter
 \renewcommand{\thepage}{\arabic{page}}
@@ -20,5 +24,3 @@
 \bibliographystyle{IEEEtran}
 \bibliography{src/bib/demo}
 %
-% Input files
-\input{src/pages/sign}
