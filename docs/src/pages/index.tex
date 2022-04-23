@@ -1,0 +1,24 @@
+\frontmatter
+\input{src/pages/frontpage}\emptydoublepage
+\renewcommand{\thepage}{\Roman{page}}
+%
+\tableofcontents
+\printglossary
+\listoffigures
+\listoftables
+\lstlistoflistings
+%
+\mainmatter
+\renewcommand{\thepage}{\arabic{page}}
+%
+\input{src/pages/chapters/index.tex}
+%
+\begin{appendices}
+	\input{src/pages/appendix/index.tex}
+\end{appendices}
+%
+\bibliographystyle{IEEEtran}
+\bibliography{src/bib/demo}
+%
+% Input files
+\input{src/pages/sign}
