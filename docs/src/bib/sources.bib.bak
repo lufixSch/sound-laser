@@ -1,0 +1,114 @@
+@Article{Tseng,
+  author  = {Wen-Kung Tseng},
+  journal = {International Journal of Advanced Research in Artificial Intelligence(ijarai)},
+  title   = {A Directional Audible Sound System using Ultrasonic Transducers},
+  year    = {2015},
+  issn    = {2165-4069},
+  volume  = {4},
+  doi     = {10.14569/ijarai.2015.040903},
+}
+
+@Article{Tsenga,
+  author  = {Wen Kung Tseng},
+  journal = {Advanced Engineering Forum},
+  title   = {Acoustic Beam Forming Using Ultrasonic Transducers},
+  year    = {2012},
+  issn    = {2234-991X},
+  pages   = {238-242},
+  volume  = {4},
+  doi     = {10.4028/www.scientific.net/aef.4.238},
+}
+
+@Booklet{GraberRaum,
+  title  = {Raumakustik},
+  author = {Werner Weselak and Gerhard Graber},
+  year   = {2007},
+}
+
+@Booklet{WeselakTech,
+  title  = {Technische Akustik},
+  author = {Werner Weselak},
+  year   = {2013},
+}
+
+@Booklet{WeselakMess,
+  title  = {Akustische Messtechnik 1},
+  author = {Werner Weselak},
+  year   = {2009},
+}
+
+@Booklet{WeselakElect,
+  title  = {Elektroakustik},
+  author = {Werner Weselak and Gerhard Graber},
+  year   = {2008},
+}
+
+@Misc{Zotter2019,
+  author   = {Franz Zotter and Matthias Frank},
+  title    = {Ambisonics},
+  year     = {2019},
+  doi      = {10.1007/978-3-030-17207-7},
+  issn     = {1866-2609},
+  subtitle = {A Practical 3D Audio Theory for Recording, Studio Production, Sound Reinforcement, and Virtual Reality},
+}
+
+@Misc{cusp,
+  author       = {{CUI Devices}},
+  title        = {CUSP-T80-15-2400-TH Datasheet},
+  date         = {2020-02-12},
+  organization = {CUI Devices},
+  publisher    = {CUI Devices},
+  url          = {https://www.mouser.at/datasheet/2/670/cusp_t80_15_2400_th-2306929.pdf},
+  urldate      = {2022-03-09},
+}
+
+@Article{,
+  author  = {Warren L. Stutzman and Gary A. Thiele},
+  title   = {Antenna Theory and Design},
+  year    = {2012},
+  issn    = {ISBN: 978-0-470-57664-9},
+  month   = may,
+  pages   = {271},
+  comment = {P 271:
+The topic of array antennas was introduced in Sec. 3.5 with several two-element arrays as
+examples of simple radiating systems. Fig. 3-19 summarizes the range of pattern control
+that is possible by changing the spacing and phasing of two-element arrays illustrated
+using elements with the same excitation amplitude and isotropie patterns. Arrays are
+popular because of the ability to shape the pattern through spacing and excitation
+adjustment along with the unique capability of scanning the pattern in angular space by
+dynamically adjusting the excitation phases electronically. Such an array is referred to as
+a phased array. The traditional method of scanning a directive beam is to mechanically
+steer an aperture antenna such as a reflector antenna. Thus, the problem of mechanically
+slewing of one large antenna is traded for the feed network complexities associated with
+properly exciting many small antennas in an array. In addition to avoiding the need for a
+mechanical structure required to point a large antenna, a phased array can also scan a
+beam at electronic speeds and can even have multiple simultaneous main beams.
+Although a feed network is required to excite the array elements, today's low-cost
+electronics, computing, and digital signal processing hardware and software make elec-
+tronic scanning affordable. Arrays have the additional advantage of supporting many
+geometries, including non-planar surfaces to conform to existing contours such as the
+skin of an aircraft. There are many applications for phased arrays, most notably in radar.
+The first widely used array antenna was the Yagi-Uda array invented in 1926 (see
+Sec. 6.3). The Yagi was followed by other fixed-phase arrays that were mechanically
+steered. Phased arrays emerged during World War II using mechanical phase shifters.
+With the invention of the ferrite phase shifter in the 1950s, full electronic scanning
+became possible. Both array element advances and solid-state phase shifters allowed for
+more affordable, compact phased arrays beginning in the 1960s. The recent innovation in
+arrays is the active phased array in which each element has transmit/receive electronics
+including phase adjustment.
+Both arrays and aperture antennas are capable of high gain. Arrays can be analyzed
+using simple mathematics by summing phasors, but reflector antenna analysis requires
+integration over the aperture, as we will find out in the next chapter. In this chapter, we
+continue the development of arrays, beginning with linear arrays of multiple isotropic
+elements, uniform excitations, and equal spacings. The pattern of individual elements is
+then included. Techniques for evaluating the directivity of linear arrays are presented
+followed by addressing nonuniform excitation of linear arrays and multidimensional
+arrays. Implementation issues of mutual coupling and feeding techniques are treated.
+Finally, more detail is presented on the types of elements used in practical arrays along
+with the special topic of wide-bandwidth phased arrays.},
+  url     = {https://books.google.at/books?id=xhZRA1K57wIC&q="phased array"&pg=PA315&redir_esc=y#v=snippet&q="phased array"&f=false},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}
+
+@Comment{jabref-meta: fileDirectoryLatex-lukas-Lukass-MBP-5.fritz.box:/Users/lukas/Documents/Studium/02 Vorlesungen/Semester 06/BA/Seminar/Hausübungen/01_quellen/src;}
