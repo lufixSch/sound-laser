@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+
+from time import sleep
+from sound_laser.devices import BluetoothDevice
+
+dev = BluetoothDevice()
+
+dev.connect()
+
+while True:
+    print(dev._socket)
+    sleep(1)
