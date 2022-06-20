@@ -44,9 +44,11 @@ class Speaker:
         msb_data = data >> 4
         lsb_data = (data & 0x000F) << 4
 
-        dac_data = [self._dac_mode, msb_data, lsb_data]
+        dac_data = [self._dac_mode, msb_data, lsb_data] 
 
-        self.spi.writebytes2(dac_data)
+#        print(dac_data)
+
+        self.spi.writebytes(dac_data)
 
     def create_write_loop(self):
         """Create write loop as new thread
@@ -64,13 +66,13 @@ class Speaker:
 
             self._running = True
 
-        self._thread = t.Thread(target=self.write_loop,
-                                args=(self.sampling_frequency))
+        self._thread = t.Thread(target=self._write_loop,
+                                args=(self.sampling_frequency, self.queue))
         self._thread.start()
 
         return self.queue
 
-    def _write_loop(self, f: int):
+    def _write_loop(self, f: int, q: q.Queue):
         """Write samples to the speaker in a loop
 
         Args:
@@ -89,9 +91,11 @@ class Speaker:
 
             self.write_data_point(data)
 
-            should_sleep_ns = sleep_ns - (last_ns - time_ns())
+            should_sleep_ns = sleep_ns - (time_ns() - last_ns)
             should_sleep_ns = 0 if should_sleep_ns < 0 else should_sleep_ns
+            print(should_sleep_ns)
             sleep(should_sleep_ns * 1e-9)
+            last_ns = time_ns()
 
     def stop_write_loop(self):
         """Stop thread in wich the write loop is running. Clear the queue
@@ -108,7 +112,6 @@ class Speaker:
             self.queue.queue.clear()
             self.queue.all_tasks_done.notify_all()
             self.queue.unfinished_tasks = 0
-
         self._thread.join()
 
     def close(self) -> None:
@@ -128,9 +131,24 @@ class Speaker:
 
 
 if __name__ == "__main__":
-    dev = Speaker(0, 0)
-    dev.open()
-    res = dev.write_data_point(10)
-    res = dev.write_data_point(500)
-    res = dev.write_data_point(2500)
+    try:
+        dev = Speaker(0, 0)
+        dev.open()
+#        q = dev.create_write_loop()
+
+        while True:
+#            q.put(10)
+#            q.put(500)
+#            q.put(2500)
+#            res = dev.write_data_point(10)
+            start = time_ns()
+            res = dev.write_data_point(500)
+            print(time_ns() - start)
+#            res = dev.write_data_point(2500)
+#            print("write data")
+#            print(q.qsize())
+#            sleep(1/200e3 * 3)
+    except KeyboardInterrupt:
+        print("Keyboard interrupt")
+
     dev.close()
