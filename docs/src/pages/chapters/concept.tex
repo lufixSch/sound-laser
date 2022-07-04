@@ -1,17 +1,23 @@
 \chapter{Concept}
 
-\begin{enumerate}
-  \item Ultrasonic beamforming
-  \subitem Reason:
-  \subsubitem Smaller speaker
-  \subsubitem Better focus
-  \item Hexagon module
-  \subitem Reason:
-  \subsubitem Extendable/Combinable with multiple modules
-  \subitem Amplification for each module
-  \subitem digital input
-  \item Aiming with physical contraption
-  \subitem no phase shifting necessary
-  \subsubitem to much amplifier circuits
-  \subsubitem to much digital processing -> ?proof?
-\end{enumerate}
+% \begin{enumerate}
+%   \item Ultrasonic beamforming
+%   \subitem Reason:
+%   \subsubitem Smaller speaker
+%   \subsubitem Better focus
+%   \item Hexagon module
+%   \subitem Reason:
+%   \subsubitem Extendable/Combinable with multiple modules
+%   \subitem Amplification for each module
+%   \subitem digital input
+%   \item Aiming with physical contraption
+%   \subitem no phase shifting necessary
+%   \subsubitem to much amplifier circuits
+%   \subsubitem to much digital processing -> ?proof?
+% \end{enumerate}
+
+The base idea of this project is to design a small module wich can be combined to a larger speaker with better beamforming characteristics. This will create the opportunity to compare for different arrangements and numbers of modules against each other. The modules will be hexagon-shaped arranged in a honeycomb like style. Each module will get it's own DAC and amplification circuit.
+
+Because of their size and their more focused dispersion characteristic ultrasonic transducers will be used in this project. How one can play audible sound over ultrasonic transducers will be explained in section \ref{sec:theory:mod}.
+
+For more freedom and \dots the signal processing will be done digital. Therefore the direction of the beam can not be controlled by phase shifting because this would mean every transducer would need it's own DAC and amplifier. \dots calculation time -> digital processing / digital communication speed with DAC \dots Alternatively the direction of the beam will be altered by a mechanical contraption.

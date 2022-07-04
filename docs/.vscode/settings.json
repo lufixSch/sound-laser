@@ -5,8 +5,8 @@
       "tools": ["latexmk"]
     },
     {
-      "name": "latexmk",
-      "tools": ["latexmk"]
+      "name": "Complete",
+      "tools": ["latexmk", "glossary", "latexmk", "texcount"]
     },
     {
       "name": "xelatex",
@@ -19,6 +19,10 @@
     {
       "name": "glossary",
       "tools": ["glossary"]
+    },
+    {
+      "name": "word count",
+      "tools": ["texcount"]
     }
   ],
   "latex-workshop.latex.tools": [
@@ -65,6 +69,20 @@
         "%DOC%",
         "-f",
         "-shell-escape"
+      ],
+      "env": {}
+    },
+    {
+      "name": "texcount",
+      "command": "texcount",
+      "args": [
+        "-sum",
+        "-total",
+        "-nosub",
+        "-out=%OUTDIR%/words.txt",
+        "%DIR%/src/pages/*.tex",
+        "%DIR%/src/pages/**/*.tex",
+        "%DIR%/src/pages/**/**/*.tex"
       ],
       "env": {}
     }
