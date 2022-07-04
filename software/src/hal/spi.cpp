@@ -1,13 +1,11 @@
 
 #include "hal/spi.hpp"
 
-#include <bcm2835.h>
 #include <iostream>
 
 SPI::SPI() {
   if (!bcm2835_spi_begin()) {
-    std::cout << "bcm2835_spi_begin failed. Are you running as root??\n";
-    return 1;
+    throw std::runtime_error("bcm2835_spi_begin failed. Are you running as root??");
   }
 
   bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);
@@ -18,3 +16,5 @@ SPI::SPI() {
 }
 
 SPI::~SPI() { bcm2835_spi_end(); }
+
+void SPI::write(char* data, uint32_t size) { this->transfer(data, this->rx_buffer, size); }

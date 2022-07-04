@@ -39,17 +39,6 @@ sudo apt update
 sudo apt-get install libfdk-aac-dev
 ````
 
-Output:
-````
-...
-The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 5C808C2B65558117
-...
-````
-
-````
-
-````
-
 ### bluez-alsa
 
 ````
