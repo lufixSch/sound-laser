@@ -5,46 +5,28 @@
 #include <thread>
 #include <vector>
 
-//#include "speaker.hpp"
-#define SIZE 1024
-
-char data[3] = { 0x12, 0xAB, 0x34 };
-char buf[3];
+#include "audio.hpp"
+#include "speaker.hpp"
 
 int main(int, char**) {
   std::cout << "Hello, world!\n";
 
-  int arr[SIZE];
-  arr[SIZE - 1] = 21;
-
-  std::vector<int>* test;
-  auto start = std::chrono::high_resolution_clock::now();
-
-  for (size_t i = 0; i < 1000; i++) {
-    /* code */
-    test = new std::vector<int>(std::begin(arr), std::end(arr));
+  if (!bcm2835_init()) {
+    std::cerr << "bcm2835_init failed. Are you running as root??\n";
+    return 1;
   }
 
-  auto end = std::chrono::high_resolution_clock::now();
-  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+  Speaker* speaker = Speaker::instance();
+  AudioProcessor* audio = AudioProcessor::instance();
 
-  std::cout << "Time taken by function: " << (float)duration.count() / 1000.0 << " microseconds" << std::endl;
+  speaker->configure(100000, 4096, 0);
+  audio->configure(44100, 512);
 
-  std::cout << arr[SIZE - 1] << " - " << test->at(SIZE - 1) << std::endl;
+  speaker->run_thread();
+  audio->run_thread();
+  audio->record_thread();
 
-  arr[SIZE - 1] = 2;
-
-  std::cout << arr[SIZE - 1] << " - " << test->at(SIZE - 1) << std::endl;
-
-  // if (!bcm2835_init()) {
-  //   std::cerr << "bcm2835_init failed. Are you running as root??\n";
-  //   return 1;
-  // }
-
-  // Speaker* speaker = Speaker::instance();
-  // speaker->run_thread();
-
-  // bcm2835_close();
+  bcm2835_close();
 
   return 0;
 }
