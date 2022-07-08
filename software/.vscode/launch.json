@@ -1,0 +1,29 @@
+{
+  "configurations": [
+    {
+      "name": "(gdb) Starten",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/sound_laser",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${fileDirname}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "${workspaceFolder}/bin/gdb_root",
+      "setupCommands": [
+        {
+          "description": "Automatische Strukturierung und Einrückung für \"gdb\" aktivieren",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "description": "Disassemblierungsvariante auf Intel festlegen",
+          "text": "-gdb-set disassembly-flavor intel",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

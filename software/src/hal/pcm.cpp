@@ -51,6 +51,8 @@ PCM::PCM(std::string device_name, char channel_cnt, uint32_t fs) {
     std::cerr << "cannot prepare audio interface for use (" << snd_strerror(err) << ")\n";
     exit(1);
   }
+
+  format_width = snd_pcm_format_width(format);
 }
 
 void PCM::readFrames(char* buffer, size_t frames) {

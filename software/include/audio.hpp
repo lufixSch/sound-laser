@@ -28,14 +28,17 @@ class AudioProcessor {
   size_t sampling_rate;
   size_t frame_size;
 
+  AudioProcessor(AudioProcessor& other) = delete;
+  void operator=(const AudioProcessor&) = delete;
+
   static AudioProcessor* instance();
   void configure(size_t sampling_rate, size_t frame_size);
 
   void record();
-  void record_thread();
+  std::thread* record_thread();
 
   void run();
-  void run_thread();
+  std::thread* run_thread();
 };
 
 #endif

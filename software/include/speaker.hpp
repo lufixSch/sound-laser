@@ -13,8 +13,9 @@
 typedef uint16_t dac_t;
 
 class Speaker {
-  SPI spi;
   static Speaker* instance_;
+
+  SPI spi;
   std::thread* loop;
 
   const char conf = 0x00;

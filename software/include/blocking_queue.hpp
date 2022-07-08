@@ -2,6 +2,7 @@
 #define SOUND_LASER_BLOCKING_QUQUE_HPP
 
 #include <condition_variable>
+#include <iostream>
 #include <mutex>
 #include <queue>
 #include <stdlib.h>
@@ -11,6 +12,11 @@
 using namespace std;
 template <class T> class BlockingQueue : public queue<T> {
   public:
+  void push(T item) {
+    queue<T>::push(item);
+    isEmpty.notify_all();
+  }
+
   T pop() {
     unique_lock<std::mutex> lck(readerMutex);
     while (queue<T>::empty()) {

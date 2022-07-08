@@ -22,9 +22,9 @@ int main(int, char**) {
   speaker->configure(100000, 4096, 0);
   audio->configure(44100, 512);
 
-  speaker->run_thread();
+  // speaker->run_thread();
   audio->run_thread();
-  audio->record_thread();
+  audio->record();
 
   bcm2835_close();
 
