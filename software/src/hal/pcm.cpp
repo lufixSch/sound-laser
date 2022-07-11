@@ -3,7 +3,7 @@
 PCM::PCM(std::string device_name, char channel_cnt, uint32_t fs) {
   int i;
   int err;
-  snd_pcm_format_t format = SND_PCM_FORMAT_S16_LE;
+  snd_pcm_format_t format = SND_PCM_FORMAT_S8;
 
   if ((err = snd_pcm_open(&capture_handle, device_name.c_str(), SND_PCM_STREAM_CAPTURE, 0)) < 0) {
     std::cerr << "cannot open audio device (" << snd_strerror(err) << ")\n";
@@ -30,12 +30,12 @@ PCM::PCM(std::string device_name, char channel_cnt, uint32_t fs) {
     exit(1);
   }
 
-  if ((err = snd_pcm_hw_params_set_rate_near(capture_handle, hw_params, &fs, 0)) < 0) {
+  if ((err = snd_pcm_hw_params_set_rate(capture_handle, hw_params, (unsigned int)fs, 0)) < 0) {
     std::cerr << "cannot set sample rate (" << snd_strerror(err) << ")\n";
     exit(1);
   }
 
-  if ((err = snd_pcm_hw_params_set_channels(capture_handle, hw_params, 1)) < 0) {
+  if ((err = snd_pcm_hw_params_set_channels(capture_handle, hw_params, channel_cnt)) < 0) {
     std::cerr << "cannot set channel count (" << snd_strerror(err) << ")\n";
     exit(1);
   }
@@ -52,11 +52,16 @@ PCM::PCM(std::string device_name, char channel_cnt, uint32_t fs) {
     exit(1);
   }
 
-  format_width = snd_pcm_format_width(format);
+  format_width = snd_pcm_format_width(format) / 8;
+  std::cout << format_width << "\n";
 }
 
 void PCM::readFrames(char* buffer, size_t frames) {
   int err;
+
+  // if ((err = snd_pcm_wait(capture_handle, -1)) < 0) {
+  //   std::cerr << "waiting for audio interface fialed (" << snd_strerror(err) << ")\n";
+  // }
 
   if ((err = snd_pcm_readi(capture_handle, buffer, frames)) != frames) {
     std::cerr << "read from audio interface failed (" << snd_strerror(err) << ")\n";

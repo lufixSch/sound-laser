@@ -45,6 +45,11 @@ void Speaker::run() {
 
 std::thread* Speaker::run_thread() {
   loop = new std::thread(&Speaker::run, this);
+  pthread_t id = (pthread_t)(loop->native_handle());
+
+  sched_param sched_params = { 1 };
+  pthread_setschedparam(id, SCHED_FIFO, &sched_params);
+
   return loop;
 }
 

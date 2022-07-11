@@ -8,6 +8,7 @@
 
 #include <bcm2835.h>
 #include <chrono>
+#include <pthread.h>
 #include <thread>
 
 typedef uint16_t dac_t;

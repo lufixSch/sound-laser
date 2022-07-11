@@ -20,11 +20,15 @@ int main(int, char**) {
   AudioProcessor* audio = AudioProcessor::instance();
 
   speaker->configure(100000, 4096, 0);
-  audio->configure(44100, 512);
+  audio->configure(8000, 512);
 
-  // speaker->run_thread();
-  audio->run_thread();
-  audio->record();
+  auto spe = speaker->run_thread();
+  auto aud = audio->run_thread();
+  auto rec = audio->record_thread();
+
+  spe->join();
+  aud->join();
+  rec->join();
 
   bcm2835_close();
 

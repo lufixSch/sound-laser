@@ -13,15 +13,17 @@ using namespace std;
 template <class T> class BlockingQueue : public queue<T> {
   public:
   void push(T item) {
-    queue<T>::push(item);
-    isEmpty.notify_all();
+    {
+      unique_lock<std::mutex> lck(lock);
+      queue<T>::push(item);
+    }
+    not_empty.notify_one();
   }
 
   T pop() {
-    unique_lock<std::mutex> lck(readerMutex);
-    while (queue<T>::empty()) {
-      isEmpty.wait(lck);
-    }
+    unique_lock<std::mutex> lck(lock);
+    not_empty.wait(lck, [this]() { return queue<T>::size() > 0; });
+
     T value = queue<T>::front();
     queue<T>::pop();
     return value;
@@ -30,8 +32,8 @@ template <class T> class BlockingQueue : public queue<T> {
   bool notEmpty() { return !queue<T>::empty(); }
 
   private:
-  std::mutex readerMutex;
-  condition_variable isEmpty;
+  std::mutex lock;
+  condition_variable not_empty;
 };
 
 #endif
