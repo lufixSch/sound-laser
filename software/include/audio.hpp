@@ -17,9 +17,7 @@ class AudioProcessor {
   std::thread* record_loop;
   std::thread* loop;
 
-  BlockingQueue<std::vector<char>> samples;
-
-  std::vector<sample_t> mapValues(std::vector<char> in);
+  BlockingQueue<std::vector<sample_t>> samples;
 
   protected:
   AudioProcessor();
@@ -39,6 +37,8 @@ class AudioProcessor {
 
   void run();
   std::thread* run_thread();
+
+  float mapValue(sample_t in) { return ((float)in - pcm_dev->format_zero) / pcm_dev->format_max; };
 };
 
 #endif

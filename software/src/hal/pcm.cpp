@@ -3,7 +3,7 @@
 PCM::PCM(std::string device_name, char channel_cnt, uint32_t fs) {
   int i;
   int err;
-  snd_pcm_format_t format = SND_PCM_FORMAT_S8;
+  snd_pcm_format_t format = SND_PCM_FORMAT_S16_LE;
 
   if ((err = snd_pcm_open(&capture_handle, device_name.c_str(), SND_PCM_STREAM_CAPTURE, 0)) < 0) {
     std::cerr << "cannot open audio device (" << snd_strerror(err) << ")\n";
@@ -53,10 +53,11 @@ PCM::PCM(std::string device_name, char channel_cnt, uint32_t fs) {
   }
 
   format_width = snd_pcm_format_width(format) / 8;
-  std::cout << format_width << "\n";
+  format_zero = 0;
+  format_max = pow(2, snd_pcm_format_width(format)) / 2;
 }
 
-void PCM::readFrames(char* buffer, size_t frames) {
+void PCM::readFrames(sample_t* buffer, size_t frames) {
   int err;
 
   // if ((err = snd_pcm_wait(capture_handle, -1)) < 0) {

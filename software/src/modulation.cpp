@@ -15,15 +15,8 @@ Modulator::Modulator(uint32_t input_fs, uint32_t input_samples, uint32_t output_
   this->carrier = M_PI * 2 * carrier_f;
 }
 
-std::vector<float> Modulator::AM(std::vector<sample_t> signal, float U0, float m) {
-  std::vector<float> out;
+float Modulator::AM(float signal, float t, float U0, float m) {
+  float c = sin(carrier * t);
 
-  for (auto t : time) {
-    auto c = sin(carrier * t);
-    auto s = (float)signal.at(round(t * input_fs));
-
-    out.emplace_back(U0 * (1 + m * s) * c);
-  }
-
-  return out;
+  return U0 * (1 + m * signal) * c;
 }

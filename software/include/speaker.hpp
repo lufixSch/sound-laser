@@ -5,9 +5,11 @@
 #include "blocking_queue.hpp"
 #include "hal/spi.hpp"
 #include "modulation.hpp"
+#include "table.hpp"
 
 #include <bcm2835.h>
 #include <chrono>
+#include <cmath>
 #include <pthread.h>
 #include <thread>
 
@@ -40,7 +42,7 @@ class Speaker {
   void run();
   std::thread* run_thread();
 
-  dac_t mapSamples(sample_t sample, size_t max_value);
+  dac_t mapSample(float sample) { return (dac_t)round((((sample) * (dac_max - dac_min)) + (dac_max - dac_min)) / 2); };
 };
 
 #endif

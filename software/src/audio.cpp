@@ -25,20 +25,13 @@ void AudioProcessor::configure(size_t sampling_rate, size_t frame_size) {
 
 void AudioProcessor::record() {
   std::cout << "Run Record Loop\n";
-  size_t len = pcm_dev->format_width * frame_size;
-  //  char* buffer = (char*)malloc(len);
+  size_t len = frame_size;
 
-  //  std::vector<char> test();
+  std::vector<sample_t> buffer(len);
 
   while (true) {
-    std::vector<char> buffer(len);
-
     pcm_dev->readFrames(buffer.data(), frame_size);
-    // samples.push(buffer);
-
-    for (const auto el : buffer) {
-      std::cout << int(el) << "\n";
-    }
+    samples.push(buffer);
   }
 
   // free(buffer);
@@ -56,21 +49,17 @@ std::thread* AudioProcessor::record_thread() {
 void AudioProcessor::run() {
   std::cout << "Run Audio Processor\n";
 
-  auto speaker = Speaker::instance();
+  const auto& speaker = Speaker::instance();
+
   Modulator mod(sampling_rate, frame_size, speaker->sampling_rate, 40000);
 
   while (true) {
-    auto buffer = samples.pop();
-    auto data = mapValues(buffer);
+    const auto& buffer = samples.pop();
 
-    for (auto sample : buffer) {
-      std::cout << int(sample) << "\n";
-    }
-
-    auto sig = mod.AM(data, 0.5, 0.2);
-
-    for (auto sample : sig) {
-      speaker->samples.push(speaker->mapSamples(sample, 65536));
+    for (const auto t : mod.time) {
+      const auto sig = mapValue(buffer.at(floor(t * sampling_rate)));
+      const auto sample = mod.AM(sig, t, 0.5f, 0.5f);
+      speaker->samples.push(speaker->mapSample(sample));
     }
   }
 }
@@ -82,14 +71,4 @@ std::thread* AudioProcessor::run_thread() {
   sched_param sched_params = { 1 };
   pthread_setschedparam(id, SCHED_FIFO, &sched_params);
   return loop;
-}
-
-std::vector<sample_t> AudioProcessor::mapValues(std::vector<char> in) {
-  std::vector<sample_t> out;
-
-  for (size_t i = 0; i < in.size(); i += 2) {
-    out.emplace_back(((sample_t)in.at(i) << 8) + in.at(i + 1));
-  }
-
-  return out;
 }

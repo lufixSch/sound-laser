@@ -19,27 +19,33 @@ void Speaker::configure(size_t sampling_rate, size_t dac_max_value, size_t dac_m
 }
 
 void Speaker::run() {
-  auto start = std::chrono::high_resolution_clock::now();
 
   long long diff;
-  char delay = (char)(1000000 / sampling_rate);
+  uint64_t delay = (uint64_t)(1000000 / sampling_rate);
 
   char data[WORD_SIZE] = { conf, 0x00, 0x00 };
 
-  while (true) {
-    start = std::chrono::high_resolution_clock::now();
+  Table* table = Table::instance();
 
+  auto entry = std::chrono::high_resolution_clock::now();
+  auto start = std::chrono::high_resolution_clock::now();
+
+  while (true) {
     auto sample = samples.pop();
     data[1] = (char)(sample >> 4);
     data[2] = (char)((sample & 0x000F) << 4);
 
-    spi.write(data, WORD_SIZE);
+    auto nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(start - entry);
+    //   spi.write(data, WORD_SIZE);
+    table->add(sample, nsec);
 
     auto diff_us
         = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start)
               .count()
         / 1000;
-    bcm2835_delayMicroseconds(10 - (uint64_t)diff_us);
+    auto diff_abs = (uint64_t)diff_us <= delay ? diff_us : delay;
+    bcm2835_delayMicroseconds(delay - diff_abs);
+    start = std::chrono::high_resolution_clock::now();
   }
 }
 
@@ -47,12 +53,8 @@ std::thread* Speaker::run_thread() {
   loop = new std::thread(&Speaker::run, this);
   pthread_t id = (pthread_t)(loop->native_handle());
 
-  sched_param sched_params = { 1 };
+  sched_param sched_params = { 2 };
   pthread_setschedparam(id, SCHED_FIFO, &sched_params);
 
   return loop;
-}
-
-dac_t Speaker::mapSamples(sample_t sample, size_t max_value) {
-  return (dac_t)((sample * (dac_max - dac_min)) / max_value + dac_min);
 }

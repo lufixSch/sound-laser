@@ -1,4 +1,6 @@
 #include <chrono>
+#include <csignal>
+#include <cstdlib>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,9 +9,26 @@
 
 #include "audio.hpp"
 #include "speaker.hpp"
+#include "table.hpp"
+
+Table* Table::instance_ = { nullptr };
+
+void exit_handler(int s) {
+  Table::instance()->print();
+  exit(0);
+}
 
 int main(int, char**) {
-  std::cout << "Hello, world!\n";
+  std::cout << "Welcome to Sound Laser!\n";
+
+  struct sigaction sig_int_handler = {
+    .sa_flags = 0,
+  };
+  sig_int_handler.sa_handler = &exit_handler;
+  sigemptyset(&sig_int_handler.sa_mask);
+  sigaction(SIGINT, &sig_int_handler, NULL);
+
+  Table::instance()->configureLen(100000);
 
   if (!bcm2835_init()) {
     std::cerr << "bcm2835_init failed. Are you running as root??\n";
@@ -20,11 +39,11 @@ int main(int, char**) {
   AudioProcessor* audio = AudioProcessor::instance();
 
   speaker->configure(100000, 4096, 0);
-  audio->configure(8000, 512);
+  audio->configure(16000, 512);
 
-  auto spe = speaker->run_thread();
-  auto aud = audio->run_thread();
-  auto rec = audio->record_thread();
+  const auto spe = speaker->run_thread();
+  const auto aud = audio->run_thread();
+  const auto rec = audio->record_thread();
 
   spe->join();
   aud->join();
