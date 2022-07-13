@@ -12,8 +12,10 @@ class Table {
   std::vector<int32_t> value;
   std::vector<uint64_t> diff;
   std::vector<std::chrono::_V2::system_clock::duration> time;
+  size_t sig_pos = 0;
 
-  size_t pos = 0;
+  std::vector<size_t> speaker_queue;
+  std::vector<size_t> audio_queue;
 
   protected:
   Table() {};
@@ -30,26 +32,20 @@ class Table {
     return instance_;
   };
 
-  void configureLen(size_t len) {
+  void configureSignalLen(size_t len) {
     time = std::vector<std::chrono::_V2::system_clock::duration>(len);
     value = std::vector<int32_t>(len);
     diff = std::vector<uint64_t>(len);
   }
 
-  void append(int32_t value, std::chrono::_V2::system_clock::duration time) {
-    this->value.emplace_back(value);
-    this->time.emplace_back(time);
-  };
-
-  void add(int32_t value, std::chrono::_V2::system_clock::duration time) {
-    this->value.at(pos) = value;
-    this->time.at(pos) = time;
-    pos++;
+  void addSignal(int32_t value, std::chrono::_V2::system_clock::duration time) {
+    this->value.at(sig_pos) = value;
+    this->time.at(sig_pos) = time;
   }
+  void addDiff(uint64_t diff) { this->diff.at(sig_pos) = diff; };
+  void nextSignal() { sig_pos++; };
 
-  void addDiff(uint64_t diff) { this->diff.at(pos - 1) = diff; };
-
-  void print() {
+  void printSignal() {
     std::cout << "val,diff,time"
               << "\n";
 
@@ -58,7 +54,18 @@ class Table {
     }
   };
 
-  void saveToFile(std::string file_name);
+  void appendQueueSizes(size_t speaker, size_t audio) {
+    speaker_queue.emplace_back(speaker);
+    audio_queue.emplace_back(audio);
+  };
+
+  void printQueueSizes() {
+    std::cout << "speaker,audio\n";
+
+    for (size_t i = 0; i < speaker_queue.size(); i++) {
+      std::cout << speaker_queue.at(i) << "," << audio_queue.at(i) << "\n";
+    }
+  }
 };
 
 #endif

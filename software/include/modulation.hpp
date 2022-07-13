@@ -18,8 +18,8 @@ class Modulator {
   Modulator(uint32_t input_fs, uint32_t input_samples, uint32_t output_fs, uint32_t carrier_f);
 
   float AM(float signal, float t, float U0, float m);
-  std::list<uint16_t> FM();
-  std::list<uint16_t> PM();
+  float FM(float signal, float t, float U0, float m);
+  float PM();
 };
 
 #endif

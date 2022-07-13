@@ -60,10 +60,6 @@ PCM::PCM(std::string device_name, char channel_cnt, uint32_t fs) {
 void PCM::readFrames(sample_t* buffer, size_t frames) {
   int err;
 
-  // if ((err = snd_pcm_wait(capture_handle, -1)) < 0) {
-  //   std::cerr << "waiting for audio interface fialed (" << snd_strerror(err) << ")\n";
-  // }
-
   if ((err = snd_pcm_readi(capture_handle, buffer, frames)) != frames) {
     std::cerr << "read from audio interface failed (" << snd_strerror(err) << ")\n";
     exit(1);

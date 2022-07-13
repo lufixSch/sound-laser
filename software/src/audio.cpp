@@ -49,6 +49,7 @@ std::thread* AudioProcessor::record_thread() {
 void AudioProcessor::run() {
   std::cout << "Run Audio Processor\n";
 
+  Table* table = Table::instance();
   const auto& speaker = Speaker::instance();
 
   Modulator mod(sampling_rate, frame_size, speaker->sampling_rate, 40000);
@@ -58,9 +59,11 @@ void AudioProcessor::run() {
 
     for (const auto t : mod.time) {
       const auto sig = mapValue(buffer.at(floor(t * sampling_rate)));
-      const auto sample = mod.AM(sig, t, 0.5f, 0.5f);
+      const auto sample = mod.AM(sig, t, 0.5f, 0.8f);
+      // const auto sample = mod.FM(sig, t, 1.0f, 0.15f);
       speaker->samples.push(speaker->mapSample(sample));
     }
+    table->appendQueueSizes(speaker->samples.size(), samples.size());
   }
 }
 

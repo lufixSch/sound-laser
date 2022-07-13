@@ -19,13 +19,15 @@ void Speaker::configure(size_t sampling_rate, size_t dac_max_value, size_t dac_m
 }
 
 void Speaker::run() {
-
   long long diff;
-  uint64_t delay = (uint64_t)(1000000 / sampling_rate);
+  uint64_t delay = (uint64_t)(1000000000 / sampling_rate);
+  uint64_t sleep_offset = 100;
+
+  std::cout << "Run Speaker Loop with a max delay of " << delay << "\n";
 
   char data[WORD_SIZE] = { conf, 0x00, 0x00 };
 
-  Table* table = Table::instance();
+  // Table* table = Table::instance();
 
   auto entry = std::chrono::high_resolution_clock::now();
   auto start = std::chrono::high_resolution_clock::now();
@@ -35,16 +37,18 @@ void Speaker::run() {
     data[1] = (char)(sample >> 4);
     data[2] = (char)((sample & 0x000F) << 4);
 
-    auto nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(start - entry);
-    //   spi.write(data, WORD_SIZE);
-    table->add(sample, nsec);
+    spi.write(data, WORD_SIZE);
 
-    auto diff_us
-        = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start)
-              .count()
-        / 1000;
-    auto diff_abs = (uint64_t)diff_us <= delay ? diff_us : delay;
-    bcm2835_delayMicroseconds(delay - diff_abs);
+    // auto nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(start - entry);
+    // table->addSignal(sample, nsec);
+
+    auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start)
+                    .count();
+    auto diff_abs = (uint64_t)diff - sleep_offset <= delay ? diff - sleep_offset : delay;
+    auto sleep = (delay - diff_abs) / 1000;
+    // table->addDiff(sleep);
+    // table->nextSignal();
+    bcm2835_delayMicroseconds(sleep);
     start = std::chrono::high_resolution_clock::now();
   }
 }

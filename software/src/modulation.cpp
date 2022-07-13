@@ -20,3 +20,8 @@ float Modulator::AM(float signal, float t, float U0, float m) {
 
   return U0 * (1 + m * signal) * c;
 }
+
+float Modulator::FM(float signal, float t, float U0, float m) {
+  float w0 = carrier;
+  return U0 * sin(w0 * (1 + m * signal) * t);
+}

@@ -14,7 +14,7 @@
 Table* Table::instance_ = { nullptr };
 
 void exit_handler(int s) {
-  Table::instance()->print();
+  Table::instance()->printQueueSizes();
   exit(0);
 }
 
@@ -28,7 +28,7 @@ int main(int, char**) {
   sigemptyset(&sig_int_handler.sa_mask);
   sigaction(SIGINT, &sig_int_handler, NULL);
 
-  Table::instance()->configureLen(100000);
+  // Table::instance()->configureSignalLen(100000);
 
   if (!bcm2835_init()) {
     std::cerr << "bcm2835_init failed. Are you running as root??\n";
