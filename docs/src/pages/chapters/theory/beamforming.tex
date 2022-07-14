@@ -12,42 +12,55 @@
   \subitem Real speaker characteristics
 \end{enumerate}
 
-Beamforming definition \dots
-
+Beamforming is a concept used for emitting and receiving signals. It describes the technique of bundling a signal so it's only transmitted into or received from one direction. Because in this thesis beamforming is used with a speaker the following explanation will use an emitter as example but the calculations would work exactly the same for a receiver.\p
+%
 In order to produce the beamforming effect you need multiple emitters arranged in one line.
-If the receiver is far enough away from the emitters the ? directional vector ? of the waves can be viewed as parallel (See figure \dots). When the receiver is positioned directly in front of the emitters (\(0^\circ\)) all waves reach it at the same time (See figure \dots).
-When the position of the receiver is rotated (\(\pm x^\circ\)) the waves have to travel different distances. Therefore they reach the receiver with a phase shift (See figure \dots). Depending of the position of the receiver and distance of the emitters the waves will cancel each other out.
-
+If the receiver is far enough away from the emitters the \textbf{?} directional vector ? of the waves can be viewed as parallel (See figure \dots). When the receiver is positioned directly in front of the emitters (\(0^\circ\)) all waves reach it at the same time (See figure \dots).
+When the position of the receiver is rotated (\(\pm x^\circ\)) the waves have to travel different distances. Therefore they reach the receiver with a phase shift (See figure \dots). Depending of the position of the receiver and distance of the emitters the waves will cancel each other out.\p
+%
 The difference in travel distance of two waves depending on the position \(\varphi\) can be described as follows. \(d\) describes the spacing between the emitters.
-
+%
 \begin{align}
   l(\varphi) &= \sin \varphi \cdot d
 \end{align}
-
+%
 Given the connection between distance, time and velocity. This equation can be used to calculate the phaseshift between those two waves.
-
+%
 \begin{align}
   t(\varphi)     &= \frac{l}{v} = \frac{d}{v} \sin \varphi \\[1em]
   \Phi(\varphi)  &= \omega \cdot t = \frac{\omega}{v} d \cdot \sin \varphi \\[1em]
   \mathrm{with~} \lambda &= \frac{v}{f} \implies \frac{\omega}{v} = \frac{2\pi \cdot f}{v} = \frac{2\pi}{\lambda} \\[1em]
   \Phi(\varphi)  &= \frac{2\pi}{\lambda} d \cdot \sin \varphi
 \end{align}
-
+%
 This can be extended for a whole array of emitters just by summing up the phaseshift.
-
+%
 \begin{align}
   \Phi(\varphi, n) &= n \cdot \frac{2\pi}{\lambda} d \cdot \sin \varphi
 \end{align}
-
-Now the phaseshift of each emitter can be calculated relative to the first on (\(n = 0\)).
-
+%
+Now the phaseshift of each emitter can be calculated relative to the first on (\(n = 0\)).\p
 Given a set of two spherical emitter generating a cosine wave (\(s_e(t)\)) the received signal (\(s(t)\)) would look as shown in figure \dots.
-
+%
 \begin{align}
-  s_e(t, \varphi, n) = \cos (\omega t + n \cdot \frac{2\pi}{\lambda} d \cdot \sin \varphi )\\[1em]
+  s_e(t, \varphi, n) = \cos (\omega t + n \cdot \frac{2\pi}{\lambda} d \cdot \sin \varphi )\label{eq:theory:beam:sig}\\[1em]
   s(t, \varphi) = \sum_{n = 0}^{N} s_e(t, \varphi, n)
 \end{align}
-
-It can be observed, that the amplitude of the resulting signal is reduced the larger \(\varphi\) gets. Until both waves cancel each other out at \(90^\circ\).
-
+%
+It can be observed, that the amplitude of the resulting signal is reduced the larger \(\varphi\) gets. Until both waves cancel each other out at \(90^\circ\).\p
 For a better analysis the resulting signal \(s(t, \varphi)\) is fourier transformed. Now the amplitude of the signal can be displayed depending on the position \(\varphi\) in a polar graph. The Amplitude is displayed in dB relative to the highest amplitude (See figure \dots).
+
+\subsection{Number of Emitters}
+
+\subsection{Distance between Emitters}
+
+\subsection{Dispersion Characteristics of Emitters}
+For the calculations above the emitters are assumed to be isotropic radiators. In the real world a speaker has some form of direction characteristic. The exact behavior is highly dependent of the signal frequency. A higher frequency usually means more directivity.\p
+%
+Figure \dots shows the dispersion characteristics of the ultrasonic transducer used in this project. This behavior can be modelled into equation \ref{eq:theory:beam:sig} as follows:
+
+\begin{align}
+  s_e(t, \varphi, n) &= \dots
+\end{align}
+
+The resulting characteristics of the phased array compared to the result with isotropic radiators are shown in figure \dots. It can be observed, that \dots
