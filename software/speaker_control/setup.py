@@ -8,7 +8,7 @@ setup(
     packages=find_packages(include=["sound_laser", ]),
     entry_points={"console_scripts": [
         "movement_control=sound_laser.main:main"]},
-    install_requires=[],
+    install_requires=["gpiozero", "aiohttp"],
     description="Movement control for sound laser",
     long_description=open("README.md").read(),
 )
