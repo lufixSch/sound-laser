@@ -20,7 +20,7 @@ class Server:
 
         self.port = port
         self.server = web.Application()
-        self._web_directory
+        self._web_directory = web_directory
 
     def open(self):
         """Run the server
@@ -59,7 +59,7 @@ class Webserver:
         with open(os.path.join(self.web_path, route_config[0])) as f:
             return web.Response(text=f.read(), content_type=route_config[1])
 
-    def _create_routes(self, files: List[str]) -> Dict[str, Tuple(str, str)]:
+    def _create_routes(self, files: List[str]) -> Dict[str, Tuple[str, str]]:
         """Create Routes from a set of filenames
 
         Args:

@@ -1,0 +1,14 @@
+[Unit]
+Description=Run the control interface for the sound laser speaker
+After=network.target pigpiod.service
+Wants=pigpiod.service
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=root
+ExecStart=sound_laser_control --port 80 --dir /home/pi/sound-laser/software/speaker_control/www
+
+[Install]
+WantedBy=multi-user.target

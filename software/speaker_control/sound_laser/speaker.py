@@ -1,8 +1,8 @@
 
-from software.movement_control.sound_laser.hal.servo import ServoHAL
+from sound_laser.hal.servo import ServoHAL
 
 
-class SpeakerControl():
+class SpeakerControl:
     """Control tilting of the speaker
     """
 
@@ -17,8 +17,8 @@ class SpeakerControl():
             y_pin (int): Pin to wich the servo for tilting around the y axis is connected (12, 13, 18, 19 for hardware PWM)
         """
 
-        self._x_servo = ServoHAL(x_pin)
-        self._y_servo = ServoHAL(y_pin)
+        self._x_servo = ServoHAL(x_pin, False)
+        self._y_servo = ServoHAL(y_pin, False)
 
     def _map_position(self, tilt_angle: float) -> int:
         """Map tilting angle to servo angle

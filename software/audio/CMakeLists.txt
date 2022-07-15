@@ -12,6 +12,7 @@ cmake_print_variables(HEADER_FILES)
 
 add_executable(${PROJECT_NAME} main.cpp ${SOURCE_FILES} ${HEADER_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_PATH})
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 find_package(Threads REQUIRED)
 

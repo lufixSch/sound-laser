@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Add all sound laser scripts and binarys to PATH and install the systemd services
+
+BASE_PATH=$(dirname $(realpath $(dirname $0)))
+
+function installAudio {
+    echo "Installing audio control ...\n"
+    cd $BASE_PATH/audio
+    cmake ---install --build -B ./build .
+    cd ./build
+    sudo make install
+    echo ""
+}
+
+function installSpeakerControl {
+    echo "Installing speaker control ..."
+    cd $BASE_PATH/speaker_control
+    pip install .
+
+    echo "Enabling pigpio"
+    sudo systemctl enable pigpiod
+    sudo systemctl restart pigpiod
+
+    echo ""
+}
+
+function installBluetoothSetup {
+    echo "Installing Bluetooth setupscript"
+    sudo cp $BASE_PATH/bin/bluealsa_setup /bin/bluealsa_setup
+}
+
+function setupServices {
+    echo "Setting up systemd services ..."
+
+    echo "copying services to /usr/lib/systemd/system/"
+    sudo cp $BASE_PATH/services/bluetooth.service /usr/lib/systemd/system/sound_laser_bluetooth.service
+    sudo cp $BASE_PATH/services/aduio.service /usr/lib/systemd/system/sound_laser_audio.service
+    sudo cp $BASE_PATH/services/speaker_control.service /usr/lib/systemd/system/sound_laser_control.service
+
+    echo "restarting systemd daemon"
+    sudo systemctl daemon-reload
+
+    echo "enabling and restarting services"
+    sudo systemctl enable sound_laser_bluetooth
+    sudo systemctl restart sound_laser_bluetooth
+
+    sudo systemctl enable sound_laser_audio
+    sudo systemctl restart sound_laser_audio
+
+    sudo systemctl enable sound_laser_control
+    sudo systemctl restart sound_laser_control
+    echo ""
+}
+
+installAudio
+installSpeakerControl
+installBluetoothSetup
+setupServices
+
+echo ""
+echo "Installation Successfull"
+echo "In order to use sound_laser_control add /home/pi/.local/bin to your path."
