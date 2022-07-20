@@ -14,7 +14,7 @@
 Table* Table::instance_ = { nullptr };
 
 void exit_handler(int s) {
-  Table::instance()->printQueueSizes();
+  // Table::instance()->printSignal();
   exit(0);
 }
 
@@ -28,7 +28,7 @@ int main(int, char**) {
   sigemptyset(&sig_int_handler.sa_mask);
   sigaction(SIGINT, &sig_int_handler, NULL);
 
-  // Table::instance()->configureSignalLen(100000);
+  Table::instance()->configureSignalLen(100000);
 
   if (!bcm2835_init()) {
     std::cerr << "bcm2835_init failed. Are you running as root??\n";
@@ -42,12 +42,22 @@ int main(int, char**) {
   audio->configure(16000, 512);
 
   const auto spe = speaker->run_thread();
-  const auto aud = audio->run_thread();
-  const auto rec = audio->record_thread();
+  // const auto aud = audio->run_thread();
+  // const auto rec = audio->record_thread();
 
-  spe->join();
-  aud->join();
-  rec->join();
+  uint16_t sample = 4000;
+  string input_buff;
+
+  while (sample >= 0) {
+    getline(std::cin, input_buff);
+    std::cout << sample << "\n";
+    speaker->samples.push(sample);
+    sample -= 100;
+  }
+
+  // spe->join();
+  // aud->join();
+  // rec->join();
 
   bcm2835_close();
 

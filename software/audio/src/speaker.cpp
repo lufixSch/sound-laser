@@ -1,4 +1,6 @@
 #include "speaker.hpp"
+#include <bitset>
+#include <iostream>
 
 #define WORD_SIZE 3
 
@@ -16,18 +18,26 @@ void Speaker::configure(size_t sampling_rate, size_t dac_max_value, size_t dac_m
   this->sampling_rate = sampling_rate;
   dac_max = dac_max_value;
   dac_min = dac_min_value;
+
+  // configure DAC
+  // configureDAC(0b01100000); // Set internal reference voltage
+}
+
+void Speaker::configureDAC(char config) {
+  char data[3] = { config, 0x00, 0x00 };
+  spi.write(data, 3);
 }
 
 void Speaker::run() {
   long long diff;
   uint64_t delay = (uint64_t)(1000000000 / sampling_rate);
-  uint64_t sleep_offset = 100;
+  uint64_t sleep_offset = 0;
 
   std::cout << "Run Speaker Loop with a max delay of " << delay << "\n";
 
   char data[WORD_SIZE] = { conf, 0x00, 0x00 };
 
-  // Table* table = Table::instance();
+  Table* table = Table::instance();
 
   auto entry = std::chrono::high_resolution_clock::now();
   auto start = std::chrono::high_resolution_clock::now();
@@ -36,6 +46,9 @@ void Speaker::run() {
     auto sample = samples.pop();
     data[1] = (char)(sample >> 4);
     data[2] = (char)((sample & 0x000F) << 4);
+
+    std::cout << sample << " - ";
+    std::cout << std::bitset<8>(data[0]) << std::bitset<8>(data[1]) << std::bitset<8>(data[2]) << "\n";
 
     spi.write(data, WORD_SIZE);
 

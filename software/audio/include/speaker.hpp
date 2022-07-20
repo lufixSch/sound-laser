@@ -21,7 +21,9 @@ class Speaker {
   SPI spi;
   std::thread* loop;
 
-  const char conf = 0x00;
+  const char conf = 0b00110000;
+
+  void configureDAC(char config);
 
   protected:
   Speaker() {};
