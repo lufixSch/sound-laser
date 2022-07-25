@@ -38,26 +38,26 @@ int main(int, char**) {
   Speaker* speaker = Speaker::instance();
   AudioProcessor* audio = AudioProcessor::instance();
 
-  speaker->configure(100000, 4096, 0);
+  speaker->configure(100000, 255, 0);
   audio->configure(16000, 512);
 
   const auto spe = speaker->run_thread();
-  // const auto aud = audio->run_thread();
-  // const auto rec = audio->record_thread();
+  const auto aud = audio->run_thread();
+  const auto rec = audio->record_thread();
 
-  uint16_t sample = 4000;
-  string input_buff;
+  //uint16_t sample = 250;
+  //string input_buff;
 
-  while (sample >= 0) {
-    getline(std::cin, input_buff);
-    std::cout << sample << "\n";
-    speaker->samples.push(sample);
-    sample -= 100;
-  }
+  //while (sample >= 0) {
+  //  getline(std::cin, input_buff);
+  //  std::cout << sample << "\n";
+  //  speaker->samples.push(sample);
+  //  sample -= 10;
+  //}
 
-  // spe->join();
-  // aud->join();
-  // rec->join();
+  spe->join();
+  aud->join();
+  rec->join();
 
   bcm2835_close();
 

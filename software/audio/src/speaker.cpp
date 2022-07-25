@@ -2,7 +2,7 @@
 #include <bitset>
 #include <iostream>
 
-#define WORD_SIZE 3
+#define WORD_SIZE 2
 
 Speaker* Speaker::instance_ { nullptr };
 
@@ -35,7 +35,7 @@ void Speaker::run() {
 
   std::cout << "Run Speaker Loop with a max delay of " << delay << "\n";
 
-  char data[WORD_SIZE] = { conf, 0x00, 0x00 };
+  char data[WORD_SIZE]; // = { conf, 0x00, 0x00 };
 
   Table* table = Table::instance();
 
@@ -44,11 +44,14 @@ void Speaker::run() {
 
   while (true) {
     auto sample = samples.pop();
-    data[1] = (char)(sample >> 4);
-    data[2] = (char)((sample & 0x000F) << 4);
+//    data[1] = (char)(sample >> 4);
+//    data[2] = (char)((sample & 0x000F) << 4);
 
-    std::cout << sample << " - ";
-    std::cout << std::bitset<8>(data[0]) << std::bitset<8>(data[1]) << std::bitset<8>(data[2]) << "\n";
+    data[0] = (char)((sample & 0x00F0) >> 4) | conf;
+    data[1] = (char)((sample & 0x000F) << 4);
+
+//    std::cout << sample << " - ";
+//    std::cout << std::bitset<8>(data[0]) << std::bitset<8>(data[1]) << "\n";
 
     spi.write(data, WORD_SIZE);
 

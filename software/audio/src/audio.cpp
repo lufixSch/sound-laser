@@ -59,8 +59,8 @@ void AudioProcessor::run() {
 
     for (const auto t : mod.time) {
       const auto sig = mapValue(buffer.at(floor(t * sampling_rate)));
-      // const auto sample = mod.AM(sig, t, 0.5f, 0.8f);
-      const auto sample = mod.FM(sig, t, 1.0f, 0.15f);
+      const auto sample = mod.AM(sig, t, 0.5f, 1.0f);
+      //const auto sample = mod.FM(sig, t, 1.0f, 0.15f);
       speaker->samples.push(speaker->mapSample(sample));
     }
     table->appendQueueSizes(speaker->samples.size(), samples.size());
