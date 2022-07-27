@@ -90,5 +90,6 @@
   "latex-workshop.latex.outDir": "%DIR%/build",
   "[latex]": {
     "editor.formatOnSave": false
-  }
+  },
+  "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

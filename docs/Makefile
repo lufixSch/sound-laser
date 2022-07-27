@@ -4,7 +4,7 @@
 # You can set these variables from the command line, and also
 # from the environment.
 OUTDIR      	?= build
-DOC						?= %ENTRYPOINT%
+DOC						?= SoundLaser_Thesis
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -12,23 +12,21 @@ help:
 
 .PHONY: help Makefile
 
-# create PDF with xelatex
+# create PDF with latexmk
+latexmk:
+	@latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -outdir=$(OUTDIR) $(DOC).tex -f
+
+# create glossary
+glossary:
+	@makeglossaries -d $(OUTDIR) $(DOC)
+
+# create pdf with glossary
 pdf:
-	@xelatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=$(OUTDIR) $(DOC)
+	@make latexmk
+	@make glossary
+	@make latexmk
 
 # clean buildfolder and create pdf
 clean:
 	@rm -R ./build
 	@make pdf
-
-# push to Bitbucket and GitHub
-push:
-	@git push
-	@git push "git@github.com:lufixSch/protokoll_vorlage.git"
-
-pull-github:
-	@git pull "git@github.com:lufixSch/protokoll_vorlage.git"
-
-# run setup script
-init:
-	@/usr/bin/env python3 ./setup/setup.py

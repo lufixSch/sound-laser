@@ -1,4 +1,4 @@
-\section{Amplifier}
+\section{Amplifier}\label{sec:pcb:amp}
 
 \begin{enumerate}
   \item Requirements
@@ -11,3 +11,24 @@
   \item OPV model decision -> BAC reference
   \item pcb layout
 \end{enumerate}
+
+Ultrasonic transducer have to be driven with a much higher voltage and current than a DAC can provide. Therefore a amplifier circuit was designed wich takes the DAC voltage as input and generates a suitible output for the array of ultrasonic transducers.
+
+\subsection{Circuit}
+
+The amplifier consists of two sections. First a non-inverting amplifier circuit to amplify the input voltage. Next a Class B power amplifier is used so the circuit is able to drive the high capacitive load of the transducers. The whole circuit is designed for single supply because the powersupply only provides a positive voltage.\p
+%
+\comp{C8} is used to filter the DC part of the inputsignal. \comp{R8} and \comp{R9} then generate a new operating point at $12V$. For AC signals a DC power supply can be seen as short circuit. This will result in \comp{R8} and \comp{R9} being parallel (Figure \dots). Combined with \comp{C8} they build a simple high pass wich can be calculated for a specific cut-off frequency.
+%
+\begin{align}
+  R_8 || R_9 &= \frac{1}{2} R_{8/9} \pmath
+  \cfrac{U_a}{U_{in}} &= \cfrac{sC_8\cdot \frac{1}{2}R_{R8/9}}{1 + sC_8\cdot \frac{1}{2}R_{8/9}} \pmath
+  f_g &= \cfrac{1}{2 \pi C_8 \cdot \frac{1}{2}R_{R8/9}} \pmath
+  C_8 &= \cfrac{1}{2 \pi f_g \cdot \frac{1}{2}R_{R8/9}}
+\end{align}
+%
+As cut-off frequency $4kHz$ was chosen and for \comp{R8} and \comp{R9} a value of $100k\Omega$ was selected. This results in a capacity of around $1.5nF$ for \comp{C8}.\p
+%
+
+
+\subsection{Stability}
