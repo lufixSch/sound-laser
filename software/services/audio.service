@@ -1,0 +1,13 @@
+[Unit]
+Description=Run Audio driver for sound laser speaker
+After=sound_laser_bluetooth.service
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=root
+ExecStart=sound_laser_audio
+
+[Install]
+WantedBy=multi-user.target

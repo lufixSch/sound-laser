@@ -1,0 +1,16 @@
+[Unit]
+Description=Configure Bluetooth to be discoverable and start bluealsa
+Wants=bluetooth.target
+After=bluetooth.target
+Wants=sound.target
+After=sound.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=root
+ExecStart=bluealsa_setup
+
+[Install]
+WantedBy=multi-user.target
