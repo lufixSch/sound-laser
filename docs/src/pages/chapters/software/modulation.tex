@@ -1,6 +1,15 @@
 \subsection{Modulation}
 
 \begin{enumerate}
-  \item Get Audio stream
+  \item Get Audio stream -> Queue
   \item Calculate modulation
+  \subitem generate t vector
+  \subitem loop
+  \subitem "resample" input
+  \subitem calculate modulation for one point
 \end{enumerate}
+%
+%
+\subsubsection*{Resample Signal}
+%
+The first problem is that the recorded audio from section \ref{sec:software:rec} has a samplingrate up to $44.1kHz$ depending on the configuration. The resulting signal however should have a samplingrate above $100kHz$. This means the signal needs to be resampled.

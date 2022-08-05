@@ -1,16 +1,27 @@
-\subsection{Servo Motors}
+\subsection{Speaker control}
 
-\begin{enumerate}
-  \item Raspberry Pi Hardware PWM vs. Software PWM
-\end{enumerate}
+The GPIO Pins of the Raspberry Pi can be controlled in Python using the \textbf{GPIOZero} library. It provides a class \lstpython{servo} wich takes the pin to wich the servo is connected. The servo can then be positoned by setting \lstpython{servo.value} to a value between $0$ and $1$. Note that \lstpython{servo} works with every pin but just pin \textbf{12} and \textbf{13} support hardware pins. For the other pins the PWM will be created by software. This variant usually creates some jitter which makes the servo tremble. To make sure the hardware PWM is used for pin \textbf{12} and \textbf{13} the pin factory should be changed to \lstpython{PiGPIOFactory} (Listing \dots).
+%
+The configuration and control of the servo is handled in the HAL class \lstpython{ServoHAL}.\p
+\dots \textit{code explanation} \dots\p
+%
+In the class \lstpython{SpeakerControl} the \lstpython{ServoHAL} class is then used to actually tilt the speaker. The class defines two servos for rotation around the x- and y-axis. Tilting can be initiated using the \lstpython{tilt_x()} or \lstpython{tilt_y()} method one of wich is shown in listing \dots. Both methods take the tilting angle in degree an map it to the corresponding servo postion using \lstpython{_map_position()}. The result is used to change the servo position.
 
 \subsection{Control interface}
+%
+The control interface consists of a website where a user can control the tilting of the speaker and an API over wich the speaker is actually controlled. Both are created in Python with the \textbf{aiohttp} library.
 
-\begin{enumerate}
-  \item Get Tilting position input
-  \subitem Webserver
-  \subitem Console Input
-  \subitem Console Command
-  \item Read Tilting position input
-  \item Calculate Servo position
-\end{enumerate}
+\subsubsection*{API}
+
+The API is generated in the class \lstpython{API}. It registers the routes \textit{tilt/x}, \textit{tilt/y} and \textit{tilt}.
+\textit{tilt/x} and \textit{tilt/y} are used to post a new titling angle to the server. \textit{tilt} returns the current tilting position around the x- and y-axis in JSON format.\p
+\dots \textit{code explanation ?} \dots\p
+
+\subsubsection*{Website}
+
+Even though the API can be used to control the speaker programmatically a website provides an easy interface for manual inputs.\p
+%
+In order to publish a website to a webbrowser a webserver needs to be configured. This is done in the class \lstpython{Webserver}. As shown in listing \dots the constructor takes a reference to the \textbf{aiohttp} Application and a path to the directory containing the \textit{.html}, \textit{.js} and \textit{.css} files. The webserver checks all files contained in this directory and registers new routes for each file so they can be accessed from a webbrowser.\p
+\dots \textit{code explanation ?} \dots\p
+%
+The design of the website is shown in figure \dots. When the site is loaded it uses the \textit{tilt} route to get the current position of the speaker. Now the two textfields can be used to enter a new angle for rotation around the x- or y-axis. Clicking on the \textbf{move} button will post this input to \textit{tilt/x} and \textit{tilt/y} respectively (Listing \dots).
