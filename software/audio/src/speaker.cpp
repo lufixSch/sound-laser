@@ -31,7 +31,6 @@ void Speaker::configureDAC(char config) {
 void Speaker::run() {
   long long diff;
   uint64_t delay = (uint64_t)(1000000000 / sampling_rate);
-  uint64_t sleep_offset = 0;
 
   std::cout << "Run Speaker Loop with a max delay of " << delay << "\n";
 
@@ -47,20 +46,13 @@ void Speaker::run() {
     data[1] = (char)(sample >> 4);
     data[2] = (char)((sample & 0x000F) << 4);
 
-    std::cout << sample << " - ";
-    std::cout << std::bitset<8>(data[0]) << std::bitset<8>(data[1]) << std::bitset<8>(data[2]) << "\n";
-
     spi.write(data, WORD_SIZE);
-
-    // auto nsec = std::chrono::duration_cast<std::chrono::nanoseconds>(start - entry);
-    // table->addSignal(sample, nsec);
 
     auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start)
                     .count();
-    auto diff_abs = (uint64_t)diff - sleep_offset <= delay ? diff - sleep_offset : delay;
+    auto diff_abs = (uint64_t)diff <= delay ? diff : delay;
     auto sleep = (delay - diff_abs) / 1000;
-    // table->addDiff(sleep);
-    // table->nextSignal();
+
     bcm2835_delayMicroseconds(sleep);
     start = std::chrono::high_resolution_clock::now();
   }
