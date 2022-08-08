@@ -9,7 +9,7 @@
   \subitem calculate modulation for one point
 \end{enumerate}
 %
+The modulation process is realised in \lstinline{AudioProcessor::run()} (Listing \dots). To make switching between modulation techniques easier the methods for calculation the modulation itself are provided by the \lstinline{Modulator} class.\p
 %
-\subsubsection*{Resample Signal}
-%
-The first problem is that the recorded audio from section \ref{sec:software:rec} has a samplingrate up to $44.1kHz$ depending on the configuration. The resulting signal however should have a samplingrate above $100kHz$. This means the signal needs to be resampled.
+First the samples captured from the audio input are fetched from the \lstinline{AudioProcessor::samples} queue. As the signal recorded with ALSA is a regular audio signal the samplingrate goes up to $48kHz$ depending on the configuration. The resulting signal however should have a samplingrate above $100kHz$. This means the signal needs to be resampled. This can be realised with different forms of interpolation. In this example zero order hold variant is used.\p
+As the \lstinline{Modulator} class is instantiated a time vector with the target samplingrate and a size corresponding to the number of recorded samples is created. The modulation is calculated for every sample by iterating over the time vector.

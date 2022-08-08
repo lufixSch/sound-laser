@@ -2,20 +2,35 @@
 
 \begin{enumerate}
   \item Requirements
-  \subitem Tilting in two dimensions
-  \subitem Remove Stress from Motors
   \subitem Angular range
-  \item Design -> Reference to Design
-  \item Servo Position to tilting angle -> Calculation
-  \subitem approximation
+  \item approximation
 \end{enumerate}
 
-\subsubsection*{Concept}
+//\subsubsection*{Concept}
 
 The tilting mechanism should allow the PCBs to tilt around two axis. For the concept the PCBs are displayed as a plane. Figure \dots shows the front and top view of the tilting mechanism for one axis.\p
 The PCBs are hold in place by a joint in the center of the plane (\textbf{A}). Now if the top of the plane is moved forwards or backwards (\textbf{B}) the plane rotates. The forward and backward movement can be created by connecting to shafts (\textbf{D} and \textbf{E}) with a joint. The base of \textbf{D} is fixed (\textbf{F}) while the end of \textbf{E} is connected to the top of the plane. This creates the triangle \textbf{D} - \textbf{E} - \textbf{B}. When the base of \textbf{D} is now rotated the shape of the triangle is changed, increasing or decreasing the length of \textbf{B}.
 The rotation around two axis can be achieved by adding a second \textbf{D} - \textbf{E} - \textbf{B} triangle to the left or right side of the plane.\p
 %
+\dots. First $\varphi$ is defined with the length of \textbf{B} using the law of cosines.
+%
+\begin{align}
+  E^2     &= D^2 + B^2 - 2DE \cdot \cos \varphi \pmath
+  \varphi &= \arccos \left( \frac{D^2 + B^2 - E^2}{2DE} \right)
+\end{align}
+%
+Next $\alpha$ is used to describe \textbf{B}.
+%
+\begin{align}
+  \sin \alpha &= \frac{B - B_0}{r}\pmath
+  B           &= \sin (\alpha) \cdot r + B_0\pmath
+  \mathrm{with~} B_0 &= B(\alpha = 0^\circ, \varphi = 90^\circ) = \sqrt{D^2 + E^2}\pmath
+  B           &= \sin (\alpha) \cdot r + \sqrt{D^2 + E^2}
+\end{align}
+%
+\textbf{B$_0$} is the length of \textbf{B} when $\alpha = 0^\circ$. $\alpha$ is defined to be $0^\circ$ when $\varphi = 90^\circ$. This results in the following equation for $\varphi$:
+%
+\begin{align}
+  \varphi &= \arccos \left( \frac{D^2 + (\sin (\alpha) \cdot r + \sqrt{D^2 + E^2})^2 - E^2}{2DE} \right)
+\end{align}
 
-
-\subsubsection*{Integration}
