@@ -1,16 +1,10 @@
 \chapter{Software}
 
-The software of the speaker has two main goals: Controlling the movement and playing a audio signal from an external source over SPI. Because both parts of the software don't need to interact with each other it was decided to split them up into two separate programs. The Speaker control is written in python but the Sound playback is written in C++ to increase performance.\p
+The software of the speaker has two main goals: Controlling the movement and playing an audio signal from an external source over SPI. Because both parts of the software don't need to interact with each other it was decided to split them up into two separate programs. The Speaker control is written in python but the Sound playback is written in C++ to increase performance.\p
 %
 A Raspberry Pi was chosen to run the software. With it's Linux operating system it provides an easy way to parallize tasks. The Raspberry Pi also has a SPI interface and enough PWM pins to control the Servo Motors.
 
 \section{Sound playback}
-\begin{enumerate}
-  \item General design
-  \item Multithreading
-  \subitem Communication between threads
-  \subitem Realtime priority
-\end{enumerate}
 
 The sound playback program starts by reading samples from a connected audio device. Those samples are then modulated and sent over spi with the right samplingrate. In order to generate a fluent audio playback the tasks where splitted into three threads.\p
 Reading audio samples and modulating them is done in the class \lstinline{AudioProcessor}. The SPI transmission is handled in the class \lstinline{Speaker}. Both classes are built with the singleton pattern.

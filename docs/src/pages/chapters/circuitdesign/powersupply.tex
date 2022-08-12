@@ -1,10 +1,6 @@
 \section{Powersupply}
 
 \begin{enumerate}
-  \item Requirements
-  \subitem 5 -> 24V
-  \subitem high switch f -> less noise
-  \item Model/Component decision
   \item Circuit design
   \subitem In -> Out Voltage
   \subitem Capacitors
@@ -18,7 +14,7 @@
 Because the speaker will be used with a Raspberry Pi or microcontroller, it should work with a input voltage of $5V$. In order to provide the $24V$ needed by the amplifier circuit a boost converter is used.\p
 The Class B Amplifier is designed to drive up to $100mA$. Aditionally the OpAmp itself and the circuit around it will need some current. Therefore the powersupply should provide at least $200mA$. Apart from this a higher switching frequency would help to reduce interferences at the speaker output.\p
 %
-Considering those requirements the \dots boost converter was chosen. Because the power usage of the ultrasonic transducers wasn|t clear in the beginning of this project the powersupply provides up to $3A$ output voltage. The output voltage can be adjusted between \dots and \dots.
+Considering those requirements the \dots boost converter was chosen. Because the power usage of the ultrasonic transducers wasn't clear in the beginning of this project the powersupply provides up to $3A$ output voltage. The output voltage can be adjusted between \dots and \dots.
 
 \subsection{Circuit}
 

@@ -3,11 +3,10 @@
 \begin{enumerate}
   \item Requirements
   \subitem VCC >= 24V -> Why
-  \item OPV model decision -> BAC reference
   \item pcb layout
 \end{enumerate}
 
-Ultrasonic transducer have to be driven with a much higher voltage and current than a DAC can provide. Therefore a amplifier circuit was designed wich takes the DAC voltage as input and generates a suitible output for the array of ultrasonic transducers.
+Ultrasonic transducer have to be driven with a much higher voltage and current than a DAC can provide. Therefore an amplifier circuit was designed wich takes the DAC voltage as input and generates a suitable output for the array of ultrasonic transducers.
 
 \subsection{Circuit}
 
@@ -24,18 +23,18 @@ The amplifier consists of two sections. First a non-inverting amplifier circuit 
   C_8 &= \cfrac{1}{2 \pi f_g \cdot \frac{1}{2}R_{R8/9}}
 \end{align}
 %
-As cut-off frequency $4kHz$ was chosen and for \comp{R8} and \comp{R9} a value of $100k\Omega$ was selected. This results in a capacity of around $1.5nF$ for \comp{C8}.\p
+As cut-off frequency $4kHz$ was chosen and for \comp{R8} and \comp{R9} a value of $100k\Omega$ was selected. This results in a capacity of around $1.5nF$ for \comp{C8}.
 
 \subsubsection*{Feedback}
 %
-Because of the new operating point of the input only AC signals should be amplified by the OpAmp. This is achieved with the capacity \comp{C9} in the feedback. The capacity blocks signals below the cut-off frequency creating a voltage follower. For signals above the cut-off frequency the capacity acts as a short circuit. The transfer function of the feedback can be used to calculate \comp{C9}. A capacitance of $10nF$ was selected. This results in a cut-off frequency of around $2.2kHz$.
+Because of the new operating point of the input only AC signals should be amplified by the OpAmp. This is achieved with the capacity \comp{C9} in the feedback. The capacity blocks signals below the cut-off frequency creating a voltage follower. For signals above the cut-off frequency the capacity acts as a short circuit. The transfer function of the feedback can be used to calculate \comp{C9}. A capacitance of $10nF$ was selected. This results in a cut-off frequency of around $3.2kHz$.
 %
 \begin{align}
   A &= \frac{1 + s C_9 (R_3 + R_4)}{1 + s C_9 R_4}\pmath
   f_g &= \frac{1}{2 \pi C_9 R_4}
 \end{align}
 %
-The amplification can be calculated like a non-inverting amplifier. In order to take advantage of the $24V$ voltage range with the $2.5V$ DAC output the amplification should be $8$. With $R_3 = 49k\Omega$ this results in a \comp{R4} of around $6.8k\Omega$.
+The amplification can be calculated like a non-inverting amplifier. In order to take advantage of the $24V$ voltage range with the $4V$ DAC output (At this point it was not clear, that this version of the DAC would not be available) the amplification should be $4$. With $R_3 = 15k\Omega$ this results in a \comp{R4} of around $5.1k\Omega$.
 %
 \begin{align}
   V = 1 + \frac{R_3}{R_4}
@@ -54,7 +53,7 @@ Because the behaviour of this highpass depends on the $ESR$ and capacity of all 
 
 \subsection{Stability}
 
-As described above a power amplifier is needed to drive the high current needed by the ultrasonic transducers. A class B amplifier was chosen because of its simple but powerefficient design. Usually this design causes crossover distortion. This is solved by putting the feedback behind the power amplifier.\p
+As described above a power amplifier is needed to drive the high current of the ultrasonic transducers. A class B amplifier was chosen because of its simple but powerefficient design. Usually this design causes crossover distortion. This is solved by putting the feedback behind the power amplifier.\p
 %
 \textbf{REWORK}\p
 Using this solution opens another set of problems. To improve stability OpAmps are usually phase compensated to represent a first order lowpass. This is now disturbed by the power amplifier.\p
@@ -62,6 +61,4 @@ Using this solution opens another set of problems. To improve stability OpAmps a
 In order to verify the stability the frequency response of the circuit was measured.\p
 \textbf{REWORK}\p
 %
-Note that this is only possible if the OpAmp is powerfull enough to drive the base current of the transistors. A better solution for higher currents would be a class AB poser amplifier.\p
-
-\subsubsection{PCB layout}
+Note that this is only possible if the OpAmp is powerfull enough to drive the base current of the transistors. A better solution for higher currents would be to use the more complex class AB power amplifier.\p

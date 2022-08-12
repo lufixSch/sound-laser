@@ -10,7 +10,7 @@ The frequency response of the amplifier circuit was already shown in figure \dot
 
 \subsection{DAC}\label{sec:meas:circuit:dac}
 
-As of the writing of this thesis the component did not work. As mentioned in the Datasheet the DAC takes the signalstructure shown in Figure \dots. When the 4 config bits are set to $0011$ the output of the DAC is updated with the new value.
+As of the writing of this thesis this component did not work properly. As mentioned in the Datasheet the DAC takes the signalstructure shown in Figure \dots. When the 4 config bits are set to $0011$ the output of the DAC is updated with the new value.
 %The DAC also supports a power down mode by sending $0100$. The power down can be
 While trying different values for the DAC it was observed, that the output voltage as well as the reference voltage become zero for some values. When sending the next value the DAC usually turned back on again. An analysis of the input and output signals during this process is shown in Figure \dots.\p
 The picture shows the digital signal wich has the config set to $0011$ as it should be. Despite this the reference voltage becomes zero after reading the config bits. No solution for this problem could be found.

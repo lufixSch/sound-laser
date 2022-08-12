@@ -2,12 +2,12 @@
 
 \subsubsection*{SPI interface}
 
-As described before the samplingrate of the SPI output should be at least $100kHz$. This means every $10us$ one packet has to be submitted. The Linux OS for the Raspberry Pi provides a SPI implementation wich can be accessed via C++ or Python. After putting a spi write into a loop without any pause or other calculation it became noticeable that this implementation is only able to send one package every $50mu s$ to $80\mu s$. This problem can be solved with the \textbf{bcm2835} C library. This library bypasses the linux drivers and directly accesses the bcm2835 SOC from the Raspberry Pi. It provides interfaces for GPIO pins, PWM and SPI as well as \lstinline{bcm2835_delayMicroseconds()} function wich is much more accurate than the builtin C++ functions.\p
+As described before the samplingrate of the SPI output should be at least $100kHz$. This means every $10us$ one packet has to be submitted. The Linux OS for the Raspberry Pi provides a SPI implementation wich can be accessed via C++ or Python. After putting a spi write into a loop without any pause or other calculation it became noticeable that this implementation is only able to send one package every $50\mu s$ to $80\mu s$. This problem can be solved with the \textbf{bcm2835} C library. This library bypasses the linux drivers and directly accesses the bcm2835 SOC from the Raspberry Pi. It provides interfaces for GPIO pins, PWM and SPI as well as \lstinline{bcm2835_delayMicroseconds()} function wich is much more accurate than the builtin C++ functions.\p
 %
 The SPI configuration is put into the HAL class \lstinline{SPI}. See listing \dots.\p
 \dots \textit{code explanation} \dots\p
 %
-The \lstinline{SPI} classIt provides the method \lstinline{write()} takes a byte array and writes it on the SPI bus (Listing \dots). The method \lstinline{transfer()} passes though the function \lstinline{bcm2835_spi_transfernb()} from the \textbf{bcm2835} library. This function takes two buffer. One contains the data wich should be transmitted. The second one is used to save the received data.\p
+The \lstinline{SPI} class provides the method \lstinline{write()} which takes a byte array and writes it on the SPI bus (Listing \dots). The method \lstinline{transfer()} passes through the function \lstinline{bcm2835_spi_transfernb()} from the \textbf{bcm2835} library. This function takes two buffer. One contains the data wich should be transmitted. The second one is used to save the received data.\p
 \dots \textit{code explanation ?} \dots\p
 
 \subsubsection*{Transmit audio}

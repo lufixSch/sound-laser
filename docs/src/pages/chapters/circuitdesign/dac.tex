@@ -13,12 +13,12 @@
   \item Problems with the DAC
 \end{enumerate}
 
-The DAC in the Circuit is used to generate an analog voltage from the signal recorded and modulated by the Raspberry Pi.\p
+The DAC in the Circuit is used to generate an analog voltage from the signal recorded and modulated by a Raspberry Pi or microcontroller.\p
 %
 As described in section \ref{sec:theory:mod} the Frequency of the modulated signal goes up to \dots$Hz$.
-Therefore, in order to comply with the sampling theorem, the sampling frequency of the DAC should be at least \dots$\frac{ks}{s}$. In order to meet this samplingrate, the digital interface has to bee fast enough. Even if up to 7 modules are connected at the same time. Additionally the DAC should work with $5V$ supply voltage and an internal reference voltage.\p
+Therefore, in order to comply with the sampling theorem, the sampling frequency of the DAC should be at least \dots$\frac{ks}{s}$. In order to meet this samplingrate, the digital interface has to bee fast enough, even if up to 7 modules are connected at the same time. Additionally the DAC should work with $5V$ supply voltage and an internal reference voltage.\p
 %
-I2C only allows a maximum clockspeed of $3.4MHz$ (High-speed mode). A size of a $10bit$ or $12bit$ DAC sample is usually about $32bit$ ($8bit$ Adress + RW, $8bit$ config, $10 - 12bit$ Data, $4 - 6bit$ Don't care). As shown in equation \ref{eq:pcb:fs} this only allows a samplingrate up to $106.25kHz$ even if only one module is connected. Because every module needs to be addressed individual this samplingrate would drop to $15.178kHz$. For this reason SPI was selected as serial interface. SPI allows a clockfrequency up to $40MHz$ and the reciever is selected by a seperate chipselect pin wich reduces the packet size of one sample to $24bit$. Because every module gets the same signal one CS pin for all DACs can be used.\p
+I2C only allows a maximum clockspeed of $3.4MHz$ (High-speed mode). A size of a $10bit$ or $12bit$ DAC sample is usually about $32bit$ ($8bit$ Adress + RW, $8bit$ config, $10 - 12bit$ Data, $4 - 6bit$ Don't care). As shown in equation \ref{eq:pcb:fs} this only allows a samplingrate up to $106.25kHz$ even if only one module is connected. Because every module needs to be addressed individual this samplingrate would drop to $15.178kHz$ when using all seven modules. For this reason SPI was selected as serial interface. SPI allows a clockfrequency up to $40MHz$ and the reciever is selected by a seperate chipselect pin wich reduces the packet size of one sample to $24bit$. Because every module gets the same signal one CS pin for all DACs can be used.\p
 %
 %First the 12bit DAC \dots was selected. It uses a I2C interface wich allows to connect the Raspberry Pi and the Speaker with only two wires independent of the number of modules. Unfortunately the DAC only supports a clock frequency up to $400kHz$ and each sample has a packetsize of $32bit$. As shown in equation \ref{eq:pcb:fs} this only allows a samplingrate up to $12500Hz$ even if only one module is connected.
 %
