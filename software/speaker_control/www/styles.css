@@ -10,7 +10,7 @@ body {
   --surface-color: rgb(56, 64, 70);
   --surface-text-color: rgb(200, 201, 203);
 
-  background-color: var(--background-color);
+  background-color: var(--surface-color);
   color: var(--text-color);
   display: flex;
   flex-direction: row;
@@ -56,6 +56,7 @@ button:active {
   max-width: 500px;
   min-width: 300px;
   padding: 16px;
+  background-color: var(--background-color);
 
   border-radius: 20px;
   box-shadow: 4px 6px 21px -4px rgba(0, 0, 0, 0.51);
