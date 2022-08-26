@@ -9,7 +9,7 @@ class ServoHAL(HAL):
         pin: number of the GPIO pin used to control the servo
     """
 
-    def __init__(self, pin: int, inverted: bool):
+    def __init__(self, pin: int, inverted: bool, offset: float):
         """Initialize servo
 
         Args:
@@ -18,18 +18,33 @@ class ServoHAL(HAL):
         """
 
         self.pin = pin
+        self.offset = offset
         self.inverted = -1 if inverted else 1
 
-        self.pwm = Servo(pin, initial_value=0, min_pulse_width=0.615 /
+        self.pwm = Servo(pin, initial_value=self._map_position(0), min_pulse_width=0.615 /
                          1000, max_pulse_width=2.495 / 1000)
 
-    def set_position(self, pos: int):
+    def _map_position(self, angle: float):
+        """Calculate servo positon from angle
+
+        Args:
+           angle (float): Angle in degree
+        """
+
+        pos = self.inverted * (angle + self.offset) / 90
+
+        if pos > 1: pos = 1
+        if pos < -1: pos = -1
+
+        return pos
+
+    def set_position(self, pos: float):
         """Set the position of the servo
 
         Args:
             pos: Servoposition in degree between -90 and 90
         """
-        self.pwm.value = self.inverted * pos / 90
+        self.pwm.value = self._map_position(pos)
 
     def close(self):
         """
