@@ -3,6 +3,7 @@ from gpiozero import Device
 
 import argparse
 import os.path as path
+import numpy as np
 
 from sound_laser.server import Server
 
@@ -12,6 +13,8 @@ WWW_PATH = path.join(path.dirname(BASE_PATH), "www")
 
 def main():
     """ Entrypoint of the movement control programm"""
+    np.seterr(all="warn")
+
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
