@@ -46,7 +46,10 @@ void Speaker::run() {
     data[1] = (char)(sample >> 4);
     data[2] = (char)((sample & 0x000F) << 4);
 
-    spi.write(data, WORD_SIZE);
+    // spi.write(data, WORD_SIZE);
+    auto timestamp
+        = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - entry);
+    table->addSignal(sample, timestamp);
 
     auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start)
                     .count();
@@ -54,7 +57,11 @@ void Speaker::run() {
     auto sleep = (delay - diff_abs) / 1000;
 
     bcm2835_delayMicroseconds(sleep);
+    table->addDiff(
+        std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start)
+            .count());
     start = std::chrono::high_resolution_clock::now();
+    table->nextSignal();
   }
 }
 

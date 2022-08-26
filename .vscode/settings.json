@@ -1,4 +1,7 @@
 {
   "makefile.extensionOutputFolder": "./.vscode",
-  "esbonio.sphinx.confDir": ""
+  "esbonio.sphinx.confDir": "",
+  "files.associations": {
+    "chrono": "cpp"
+  }
 }
