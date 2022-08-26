@@ -11,3 +11,43 @@
   \item Decission
   \item Bandwith
 \end{enumerate}
+%
+Modulation in electronics describes the process of altering parameters of a carrier wave depending on an input signal. This will transfer the frequency of the input signal so it can be transmitted for example via radio wave. The receiver can then demodulate the signal to retrieve the original.
+
+\subsection{Modulationtechniques}
+
+\subsubsection*{AM}
+With the amplitude modulation the amplitude of the carrier signal $c(t)$ is changed depending on the modulating signal $s(t)$. The modulation depth $m$ defines to wich grade the amplitude is modified. With the parameter $U_0$ the offset of the modulating signal can be changed.\p
+The AM is generally defined as follows:
+%
+\begin{align}
+  AM(t) &= U_0 \cdot (1 + m \cdot s(t)) \cdot c(t)
+\end{align}
+%
+Usually the carrier signal is a sine or cosine wave with the carrier frequency $f_c$.
+%
+\begin{align}
+  AM(t) &= U_0 \cdot (1 + m \cdot s(t)) \cdot \cos (2 \pi \cdot f_c \cdot t)
+\end{align}
+%
+\subsubsection*{FM}
+%
+Using frequency modulation the frequency of the carrier signal $c(t, f)$ is changed by the modulating signal $s(t)$. The modulation depth $m$ defines to wich grade the frequency is modified. With the parameter $U_0$ the amplitude of the carrier is defined.\p
+The FM is generally defined as follows:
+%
+\begin{align}
+  FM(t) &= U_0 \cdot c(t, 2 \pi \cdot f_c \cdot (1 + m \cdot s(t)))\pmath
+  FM(t) &= U_0 \cdot \cos (2 \pi \cdot f_c \cdot (1 + m \cdot s(t)) \cdot t)
+\end{align}
+
+\subsection{Demodulation}
+
+\subsubsection*{AM}
+
+\subsubsection*{FM}
+
+\subsection{Bandwith}
+
+\subsubsection*{AM}
+
+\subsubsection*{FM}

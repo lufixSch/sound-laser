@@ -6,8 +6,14 @@ A Raspberry Pi was chosen to run the software. With it's Linux operating system 
 
 \section{Sound playback}
 
-The sound playback program starts by reading samples from a connected audio device. Those samples are then modulated and sent over spi with the right samplingrate. In order to generate a fluent audio playback the tasks where splitted into three threads.\p
+The sound playback program starts by reading samples from a connected audio device. Those samples are then modulated and sent over spi with the right samplingrate. In order to generate a fluent audio playback the tasks where splitted into three threads. The whole sequence of the program is shown in figure \ref{fig:software:sound_sequence}.\p
 Reading audio samples and modulating them is done in the class \lstinline{AudioProcessor}. The SPI transmission is handled in the class \lstinline{Speaker}. Both classes are built with the singleton pattern.
+%
+\begin{figure}
+  \centering
+  \includegraphics[height=\mediumheight]{src/assets/pictures/software/sequence_diagramm.png}
+  \caption{Sound playback sequence diagram}\label{fig:software:sound_sequence}
+\end{figure}
 %
 The communication between threads is handlend with a queue (Listing \dots). This implementation makes the \lstinline{std::queue} threadsafe by using a lock to access the underlying queue and also blocks the thread if no data is available. \dots \textit{explanation} \dots This is usefull because for example there is no need to send data over SPI when no new sample is generated.\p
 %
