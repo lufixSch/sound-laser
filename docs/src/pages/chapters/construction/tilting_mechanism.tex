@@ -3,7 +3,6 @@
 \begin{enumerate}
   \item Requirements
   \subitem Angular range
-  \item approximation
 \end{enumerate}
 
 %\subsubsection*{Concept}
@@ -13,7 +12,7 @@ The tilting mechanism should allow the PCBs to tilt around two axis. For develop
 The PCBs are hold in place by a joint in the center of the plane (\textbf{A}). Now if the top of the PCBs is moved forwards or backwards (\textbf{B}), the plane rotates. The forward and backward movement can be created by connecting to shafts (\textbf{D} and \textbf{E}) with a joint. The base of \textbf{D} is fixed (\textbf{F}) while the end of \textbf{E} is connected to the top of the plane. This creates the triangle \textbf{D} - \textbf{E} - \textbf{B}. When the base of \textbf{D} is now rotated the shape of the triangle is changed, increasing or decreasing the length of \textbf{B}.
 The rotation around two axis can be achieved by adding a second \textbf{D} - \textbf{E} - \textbf{B} triangle to the left or right side of the plane.
 %
-\begin{figure}[ht]
+\begin{figure}
   \begin{subfigure}[b]{0.49\textwidth}
     \includegraphics[width=\textwidth]{src/assets/pictures/construction/mec_front.png}
     \caption{Front view}
@@ -29,7 +28,7 @@ The rotation around two axis can be achieved by adding a second \textbf{D} - \te
   \label{fig:const:tilt:mech}
 \end{figure}
 %
-\begin{figure}[ht]
+\begin{figure}
   \begin{subfigure}[b]{0.49\textwidth}
     \includegraphics[width=\textwidth]{src/assets/pictures/construction/math_front.png}
     \caption{Front view}
@@ -66,4 +65,5 @@ Next $\alpha$ is used to describe \textbf{B}. The result is inserted into equati
 \begin{align}
   \varphi &= \arccos \left( \frac{D^2 + (\sin (\alpha) \cdot r + \sqrt{D^2 + E^2})^2 - E^2}{2DE} \right)
 \end{align}
-
+%
+It should be noted that this solution is only an approximation. As shown in figure \ref{fig:const:tilt:math} even though the plane rotates, \textbf{B} remains in a straight line. In reality the plane would rotate on a circular path which would change the angle of \textbf{B} (in the front view) and with it the actual length of \textbf{B} debending on the angle $\alpha$. However during testing on the real speaker the error of the calculation wasn't noticeable.
