@@ -1,9 +1,49 @@
 \subsection{Modulation}
 %
-The modulation process is realised in \lstinline{AudioProcessor::run()} (Listing \dots). To make switching between modulation techniques easier the methods for calculation the modulation itself are provided by the \lstinline{Modulator} class.\p
+The modulation process is realised in \lstcpp{AudioProcessor::run()} (Listing \ref{lst:software:mod:loop}). To make switching between modulation techniques easier the methods for calculation the modulation itself are provided by the \lstcpp{Modulator} class.\p
 %
-First the samples captured from the audio input are fetched from the \lstinline{AudioProcessor::samples} queue. As the signal recorded with ALSA is a regular audio signal the samplingrate goes up to $48kHz$ depending on the configuration. The resulting signal however should have a samplingrate above $100kHz$. This means the signal needs to be resampled. This can be realised with different forms of interpolation. In this example zero order hold variant is used.\p
+\begin{mdframed}
+\begin{lstlisting}[caption=Audio processing loop, label=lst:software:mod:loop]
+void AudioProcessor::run() {
+  std::cout << "Run Audio Processor\n";
+
+  const auto& speaker = Speaker::instance();
+  Modulator mod(sampling_rate, frame_size, speaker->sampling_rate, 40000);
+
+  while (true) {
+    const auto& buffer = samples.pop();
+
+    for (const auto t : mod.time) {
+      const auto sig = mapValue(buffer.at(floor(t * sampling_rate)));
+      const auto sample = mod.AM(sig, t, 0.5f, 0.8f); // AM
+      // const auto sample = mod.FM(sig, t, 1.0f, 0.15f);   // FM
+      speaker->samples.push(speaker->mapSample(sample));
+    }
+  }
+}
+\end{lstlisting}
+\end{mdframed}
 %
-As the \lstinline{Modulator} class is instantiated a time vector with the target samplingrate and a size corresponding to the number of recorded samples is created. The modulation is calculated for every sample by iterating over the time vector.\p
+First the samples captured from the audio input are fetched from the \lstcpp{AudioProcessor::samples} queue. As the signal recorded with ALSA is a regular audio signal the samplingrate goes up to $48kHz$ depending on the configuration. The resulting signal however should have a samplingrate above \dots. This means the signal needs to be resampled. This can be realised with different forms of interpolation. In this example the zero order hold variant is used.\p
 %
-Listing \dots and \dots show the C++ implementations of the AM and FM explained in section \ref{sec:theory:mod}.
+As the \lstcpp{Modulator} class is instantiated a time vector with the target samplingrate and a size corresponding to the number of recorded samples is created. The modulation is calculated for every sample by iterating over the time vector.\p
+%
+Listing \ref{lst:software:mod:am} and \ref{lst:software:mod:fm} show the C++ implementations of the AM and FM explained in section \ref{sec:theory:mod}.
+%
+\begin{mdframed}
+\begin{lstlisting}[caption=Amplitude modulation, label=lst:software:mod:am]
+float Modulator::AM(float signal, float t, float U0, float m) {
+  float c = sin(carrier * t);
+  return U0 * (1 + m * signal) * c;
+}
+\end{lstlisting}
+\end{mdframed}
+%
+\begin{mdframed}
+\begin{lstlisting}[caption=Frequency modulation, label=lst:software:mod:fm]
+float Modulator::FM(float signal, float t, float U0, float m) {
+  float w0 = carrier;
+  return U0 * sin(w0 * (1 + m * signal) * t);
+}
+\end{lstlisting}
+\end{mdframed}

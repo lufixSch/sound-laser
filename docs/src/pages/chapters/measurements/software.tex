@@ -2,9 +2,9 @@
 
 \subsection{Measurement Setup}
 
-The validation of the software was done using the \lstinline{Tabel} class. This class provides multiple vectors wich can be used to save samples or other data. When the program is exited this data is written to stdout using the \textit{CSV} format. This can then be analyzed directly in the terminal or printed to a file and imported into a python notebook.\p
+The validation of the software was done using the \lstcpp{Tabel} class. This class provides multiple vectors wich can be used to save samples or other data. When the program is exited this data is written to stdout using the \textit{CSV} format. This can then be analyzed directly in the terminal or printed to a file and imported into a python notebook.\p
 %
-Instead of sending the resulting signal over SPI a timestamp is generated and both (timestamp and signal) are added to the table with \lstinline{addSignal()}. Additionally the duration of one iteration (with sleep) is saved using \lstinline{addDiff()}. Finally the position in the table is increased to the next row with \lstinline{nexSignal()}.
+Instead of sending the resulting signal over SPI a timestamp is generated and both (timestamp and signal) are added to the table with \lstcpp{addSignal()}. Additionally the duration of one iteration (with sleep) is saved using \lstcpp{addDiff()}. Finally the position in the table is increased to the next row with \lstcpp{nexSignal()}.
 
 \subsection{Discussion}
 

@@ -6,14 +6,102 @@ Because of the current shortage off Raspberry Pi's and Raspberry Pi accessories 
 %
 \subsubsection*{ALSA interface}
 
-The interface to ALSA is the HAL class \lstinline{PCM}. On construction it takes a device name, channel count and samplingrate. With those parameters the ALSA PCM device is configured using the \textbf{ALSA} C library (Listing \dots).\cite{noauthor_alsa_nodate} The configuration is based on an example of the ALSA Audio API tutorial from Paul Davis.\cite{davis_tutorial_nodate}\p
+The interface to ALSA is the HAL class \lstcpp{PCM}. On construction it takes a device name, channel count and samplingrate. With those parameters the ALSA PCM device is configured using the \textbf{ALSA} C library (Listing \ref{lst:software:audio_in:pcm_config}).\cite{noauthor_alsa_nodate} The configuration is based on an example of the ALSA Audio API tutorial from Paul Davis.\cite{davis_tutorial_nodate}\p
+%
+\begin{mdframed}
+\begin{lstlisting}[caption=ALSA interface configuration, label=lst:software:audio_in:pcm_config]
+PCM::PCM(std::string device_name, char channel_cnt, uint32_t fs) {
+  int i;
+  int err;
+  snd_pcm_format_t format = SND_PCM_FORMAT_S16_LE;
+
+  if ((err = snd_pcm_open(&capture_handle, device_name.c_str(), SND_PCM_STREAM_CAPTURE, 0)) < 0) {
+    std::cerr << "cannot open audio device (" << snd_strerror(err) << ")\n";
+    exit(1);
+  }
+
+  if ((err = snd_pcm_hw_params_malloc(&hw_params)) < 0) {
+    std::cerr << "cannot allocate hardware parameter structure (" << snd_strerror(err) << ")\n";
+    exit(1);
+  }
+
+  if ((err = snd_pcm_hw_params_any(capture_handle, hw_params)) < 0) {
+    std::cerr << "cannot initialize hardware parameter structure (" << snd_strerror(err) << ")\n";
+    exit(1);
+  }
+
+  if ((err = snd_pcm_hw_params_set_access(capture_handle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)) < 0) {
+    std::cerr << "cannot set access type (" << snd_strerror(err) << ")\n";
+    exit(1);
+  }
+
+  if ((err = snd_pcm_hw_params_set_format(capture_handle, hw_params, format)) < 0) {
+    std::cerr << "cannot set sample format (" << snd_strerror(err) << ")\n";
+    exit(1);
+  }
+
+  if ((err = snd_pcm_hw_params_set_rate(capture_handle, hw_params, (unsigned int)fs, 0)) < 0) {
+    std::cerr << "cannot set sample rate (" << snd_strerror(err) << ")\n";
+    exit(1);
+  }
+
+  if ((err = snd_pcm_hw_params_set_channels(capture_handle, hw_params, channel_cnt)) < 0) {
+    std::cerr << "cannot set channel count (" << snd_strerror(err) << ")\n";
+    exit(1);
+  }
+
+  if ((err = snd_pcm_hw_params(capture_handle, hw_params)) < 0) {
+    std::cerr << "cannot set parameters (" << snd_strerror(err) << ")\n";
+    exit(1);
+  }
+
+  snd_pcm_hw_params_free(hw_params);
+
+  if ((err = snd_pcm_prepare(capture_handle)) < 0) {
+    std::cerr << "cannot prepare audio interface for use (" << snd_strerror(err) << ")\n";
+    exit(1);
+  }
+
+  format_width = snd_pcm_format_width(format) / 8;
+  format_zero = 0;
+  format_max = pow(2, snd_pcm_format_width(format)) / 2;
+}
+\end{lstlisting}
+\end{mdframed}
 %
 \dots \textit{code explanation} \dots\p
 %
-After the configuration the method \lstinline{readFrames()} can be used to read a given number of samples (Listing \dots). The method will block the code execution until all frames are received or an error occurs.
+After the configuration the method \lstcpp{readFrames()} can be used to read a given number of samples (Listing \ref{lst:software:audio_in:pcm_read}). The method will block the code execution until all frames are received or an error occurs.
 %
-\dots \textit{code explanation ?} \dots
+\begin{mdframed}
+\begin{lstlisting}[caption=Method for reading frames from an ALSA device, label=lst:software:audio_in:pcm_read]
+void PCM::readFrames(sample_t* buffer, size_t frames) {
+  int err;
+
+  if ((err = snd_pcm_readi(capture_handle, buffer, frames)) != frames) {
+      std::cerr << "read from audio interface failed (" << snd_strerror(err) << ")\n";
+      exit(1);
+    }
+}
+  \end{lstlisting}
+\end{mdframed}
 %
 \subsubsection*{Record audio}
 %
-The \lstinline{PCM} class is initialized in \lstinline{AudioProcessor::configure()}. This instance is then used in the method \lstinline{record()} shown in listing \dots. \lstinline{record()} creates a loop in wich a set of samples is read into a buffer and then pushed into the \lstinline{AudioProcessor::samples} queue. The method can be executed directly or by execution \lstinline{record_thread()} which creates a new thread for the loop.
+The \lstcpp{PCM} class is initialized in \lstcpp{AudioProcessor::configure()}. This instance is then used in the method \lstcpp{record()} shown in listing \dots. \lstcpp{record()} creates a loop in wich a set of samples is read into a buffer and then pushed into the \lstcpp{AudioProcessor::samples} queue. The method can be executed directly or by execution \lstcpp{record_thread()} which creates a new thread for the loop.
+
+\begin{mdframed}
+\begin{lstlisting}[caption=Record loop, label=lst:software:audio_in:record]
+void AudioProcessor::record() {
+  std::cout << "Run Record Loop\n";
+  size_t len = frame_size;
+
+  std::vector<sample_t> buffer(len);
+
+  while (true) {
+    pcm_dev->readFrames(buffer.data(), frame_size);
+    samples.push(buffer);
+  }
+}
+\end{lstlisting}
+\end{mdframed}

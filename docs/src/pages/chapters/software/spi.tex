@@ -2,21 +2,92 @@
 
 \subsubsection*{SPI interface}
 
-As described before the samplingrate of the SPI output should be at least $100kHz$. This means every $10us$ one packet has to be submitted. The Linux OS for the Raspberry Pi provides a SPI implementation wich can be accessed via C++ or Python. After putting a spi write into a loop without any pause or other calculation it became noticeable that this implementation is only able to send one package every $50\mu s$ to $80\mu s$. This problem can be solved with the \textbf{bcm2835} C library.\cite{mccauley_bcm2835_nodate} This library bypasses the linux drivers and directly accesses the bcm2835 SOC from the Raspberry Pi. It provides interfaces for GPIO pins, PWM and SPI as well as \lstinline{bcm2835_delayMicroseconds()} function wich is much more accurate than the builtin C++ functions.\p
+As described before the samplingrate of the SPI output should be at least $100kHz$. This means every $10us$ one packet has to be submitted. The Linux OS for the Raspberry Pi provides a SPI implementation wich can be accessed via C++ or Python. After putting a spi write into a loop without any pause or other calculation it became noticeable that this implementation is only able to send one package every $50\mu s$ to $80\mu s$. This problem can be solved with the \textbf{bcm2835} C library.\cite{mccauley_bcm2835_nodate} This library bypasses the linux drivers and directly accesses the bcm2835 SOC from the Raspberry Pi. It provides interfaces for GPIO pins, PWM and SPI as well as \lstcpp{bcm2835_delayMicroseconds()} function wich is much more accurate than the builtin C++ functions.\p
 %
-The SPI configuration is put into the HAL class \lstinline{SPI}. See listing \dots.\p
+The SPI configuration is put into the HAL class \lstcpp{SPI}. See listing \ref{lst:software:spi:conf}.\p
+%
+\begin{mdframed}
+\begin{lstlisting}[caption=SPI configuration, label=lst:software:spi:conf]
+SPI::SPI() {
+  if (!bcm2835_spi_begin()) {
+    throw std::runtime_error("bcm2835_spi_begin failed. Are you running as root??");
+  }
+
+  bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);
+  bcm2835_spi_setDataMode(BCM2835_SPI_MODE0);
+  bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_64); // BCM2835_SPI_CLOCK_DIVIDER_16);
+  bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
+  bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);
+}
+\end{lstlisting}
+\end{mdframed}
+%
 \dots \textit{code explanation} \dots\p
 %
-The \lstinline{SPI} class provides the method \lstinline{write()} which takes a byte array and writes it on the SPI bus (Listing \dots). The method \lstinline{transfer()} passes through the function \lstinline{bcm2835_spi_transfernb()} from the \textbf{bcm2835} library. This function takes two buffer. One contains the data wich should be transmitted. The second one is used to save the received data.\p
-\dots \textit{code explanation ?} \dots\p
-
+The \lstcpp{SPI} class provides the method \lstcpp{write()} which takes a byte array and writes it on the SPI bus (Listing \dots). \lstcpp{write()} uses the method \lstcpp{transfer()} which passes through the function \lstcpp{bcm2835_spi_transfernb()} from the \textbf{bcm2835} library. This function takes two buffer. One contains the data wich should be transmitted. The second one is used to save the received data.
+%
+\begin{mdframed}
+\begin{lstlisting}[caption=Method for writing data onto the SPI bus, label=lst:software:spi:write]
+void SPI::write(char* data, uint32_t size) {
+  this->transfer(data, this->rx_buffer, size);
+}
+\end{lstlisting}
+\end{mdframed}
+%
+\lstcpp{rx_buffer} is just a $4096$ Byte array where the unused, received data is dumped.
+%
 \subsubsection*{Transmit audio}
 
-The audio transmission over SPI is done in the class \lstinline{Speaker}. The method \lstinline{Speaker::run()} creates a loop in wich the next audio sample is fetched from the \lstinline{Speaker::samples} queue and transmitted over SPI. After the transmission the loop is paused to reach the right samplingrate. The sleep time is calculated dynamically depending on the time the sending of the data took. The coresponding code is shown in listing \dots.\p
-\dots \textit{code explanation} \dots\p
+The audio transmission over SPI is done in the class \lstcpp{Speaker}. The method \lstcpp{Speaker::run()} creates a loop in wich the next audio sample is fetched from the \lstcpp{Speaker::samples} queue and transmitted over SPI. After the transmission the loop is paused to reach the right samplingrate. The sleep time is calculated dynamically depending on the time the sending of the data took. The coresponding code is shown in listing \ref{lst:software:spi:loop}.
+%
+\begin{mdframed}
+\begin{lstlisting}[caption=Audio transmission loop, label=lst:software:spi:loop]
+void Speaker::run() {
+  std::cout << "Run Speaker Loop with a max delay of " << delay << "\n";
+
+  long long diff;
+  uint64_t delay = (uint64_t)(1000000000 / sampling_rate);
+  char data[WORD_SIZE] = { conf, 0x00, 0x00 };
+  auto start = std::chrono::high_resolution_clock::now();
+
+  while (true) {
+    auto sample = samples.pop();
+    data[1] = (char)(sample >> 4);
+    data[2] = (char)((sample & 0x000F) << 4);
+
+    spi.write(data, WORD_SIZE);
+
+    auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start)
+                    .count();
+    auto diff_abs = (uint64_t)diff <= delay ? diff : delay;
+    auto sleep = (delay - diff_abs) / 1000;
+
+    bcm2835_delayMicroseconds(sleep);
+    start = std::chrono::high_resolution_clock::now();
+  }
+}
+\end{lstlisting}
+\end{mdframed}
+%
 
 \subsubsection*{Linux Realtime}
 
-Because the signal is split into a fixed samplingrate, timing is really important for this task. As described before this is improved by using \lstinline{bcm2835_delayMicroseconds()} over builtin C++ sleep functions. Nevertheless, because of the nature of Linux scheduling, it can not be quaranteed that the thread will pause exactly the given delay every time. Linux scheduling is fair. This means every process gets its time on the CPU. If a process was paused and needs to wake up again it has to wait for the current process on the cpu to finish it's time slice. For time relevant processes Linux provides a feature to bypass this behaviour. A process can be given a scheduling priority. Now when this process wants to wake up and a process with a lower or no priority uses the CPU it is paused immediately and the proccess does not need to wait. This still don't quarantees a fixed sleep time because there could always be a task with higher priority but it reduces the risk of waiting.\p
+Because the signal is split into a fixed samplingrate, timing is really important for this task. As described before this is improved by using \lstcpp{bcm2835_delayMicroseconds()} over builtin C++ sleep functions. Nevertheless, because of the nature of Linux scheduling, it can not be quaranteed that the thread will pause exactly the given delay every time. Linux scheduling is fair. This means every process gets its time on the CPU. If a process was paused and needs to wake up again it has to wait for the current process on the cpu to finish it's time slice. For time relevant processes Linux provides a feature to bypass this behaviour. A process can be given a scheduling priority. Now when this process wants to wake up and a process with a lower or no priority uses the CPU it is paused immediately and the proccess does not need to wait. This still don't quarantees a fixed sleep time because there could always be a task with higher priority but it reduces the risk of waiting.\p
 %
-The scheduling priority can be changed using \lstinline{pthread_setschedparam()} from the \textbf{PThread} library (Listing \dots). It takes a priority between $1$ and $99$, where $99$ is the highest priority and $1$ is the lowest. A priority of $1$ or $2$ is usually enough because most processes don't have any scheduling priority.
+The scheduling priority can be changed using \lstcpp{pthread_setschedparam()} from the \textbf{PThread} library (Listing \ref{lst:software:spi:rt}). It takes a priority between $1$ and $99$, where $99$ is the highest priority and $1$ is the lowest. A priority of $1$ or $2$ is usually enough because most processes don't have any scheduling priority.
+%
+\begin{mdframed}
+\begin{lstlisting}[caption=Example for creating a thread with realtime priority, label=lst:software:spi:rt]
+std::thread* Speaker::run_thread() {
+  loop = new std::thread(&Speaker::run, this);
+  pthread_t id = (pthread_t)(loop->native_handle());
+
+  sched_param sched_params = { 2 };
+  pthread_setschedparam(id, SCHED_FIFO, &sched_params);
+
+  return loop;
+}
+\end{lstlisting}
+\end{mdframed}
+%
+All threads used in the program are started with a priority of $1$ or $2$ as shown in listing \ref{lst:software:spi:rt}.

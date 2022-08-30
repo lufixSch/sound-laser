@@ -119,13 +119,15 @@
 %# Setup Listing ------------------------------------------------------------------------
 \lstloadlanguages{Bash,Matlab,[ANSI]C,[LaTeX]TeX, C++, Python}
 
+\newcommand{\lstbase}{\fontsize{8}{8}\normalfont\sffamily}
+
 \lstset{
-    frame=top,frame=bottom,
-    basicstyle=\fontsize{8}{8}\normalfont\sffamily,
-    commentstyle=\color{mGreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{DENcol},
-    stringstyle=\color{mPurple},            % the size of the fonts that are used for the code
+  frame=top,frame=bottom,
+  basicstyle=\lstbase,
+  commentstyle=\color{mGreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{DENcol},
+  stringstyle=\color{mPurple},            % the size of the fonts that are used for the code
 	stepnumber=1,                           % the step between two line-numbers. If it is 1 each line will be numbered
 	numbersep=6pt,                          % how far the line-numbers are from the code
 	tabsize=2,                              % tab size in blank spaces
@@ -133,7 +135,6 @@
 	breaklines=true,                        % sets automatic line breaking
 	captionpos=t,                           % sets the caption-position to top
 	mathescape=true,
-	stringstyle=\color{black}\ttfamily,     % Farbe der String
 	showspaces=false,                       % Leerzeichen anzeigen ?
 	showtabs=false,                         % Tabs anzeigen ?
 	xleftmargin=15pt,
