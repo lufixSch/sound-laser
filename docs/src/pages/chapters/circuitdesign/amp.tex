@@ -69,12 +69,18 @@ Because the behaviour of this highpass depends on the $ESR$ and capacity of all 
 
 As mentioned before the feedback of the amplification circuit includes a capacitance. To improve stability OpAmps are usually phase compensated to represent a first order lowpass. Introducing a capacitance into the feedback could disturbed the Stability of the circuit.
 %
-A general amplification circuit can be represented as shown in figure \dots. The output signal can therefore be represented as shown in equation \ref{eq:pcb:amp:stab:ua}.
+A general amplification circuit can be represented as shown in figure \ref{fig:pcb:amp:stab:block}. The output signal can therefore be represented as shown in equation \ref{eq:pcb:amp:stab:ua}.
 %
 \begin{align}
   U_a &= \underbar{A}_d (U_e - \underbar{k}U_a)\pmath
   U_a &= U_e \cfrac{\underbar{A}_d}{1 + \underbar{k}\underbar{A}_d}\label{eq:pcb:amp:stab:ua}
 \end{align}
+%
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\textwidth]{src/assets/pictures/circuit/amp_block_circuit.png}
+  \caption{Block circuit of an amplification circuit}\label{fig:pcb:amp:stab:block}
+\end{figure}
 %
 This results in the circuit being unstable if $kA_d = -1$.
 %
@@ -83,12 +89,24 @@ This results in the circuit being unstable if $kA_d = -1$.
   \arg(\underbar{k}\underbar{A}_d) &= - 180^\circ
 \end{align}
 %
-In order to verify the stability, the frequency response of the \dots has been measured (Figure \ref{fig:pcb:amp:bode}).\p
-\textit{analysis}
+In order to verify the stability, $\underbar{A}_d$ and $\underbar{k}$ for the amplifier circuit where calculated.
+%
+\begin{align}
+  A_d &= \frac{A_0}{1 + \frac{s}{w_g}}\pmath
+  w_g &= 2\pi \cdot \frac{GBW}{A_0}
+\end{align}
+%
+The open loop gain $A_0$ as well as the $GBW$ were taken from the data sheet.\cite{noauthor_tl08xx_2021}
+%
+\begin{align}
+  k &= \frac{1 + s C_9 R_4}{1 + s C_9 (R_4 + R_3)}
+\end{align}
+%
+Figure \ref{fig:pcb:amp:stab:loop_gain} shows the bodeplot of $\underbar{k}\underbar{A}_d$. It can be observed that the amplifier still has a phase reserve of $55^\circ$, which is enough to keep it stable.
 %
 \begin{figure}
   \centering
-  \includegraphics[height=\largeheight]{src/assets/pictures/circuit/amp_bode_small.png}
-  \caption{Frequency response of the amplifier circuit}\label{fig:pcb:amp:bode}
+  \includegraphics[height=\largeheight]{src/assets/pictures/circuit/amp_stability.pdf}
+  \caption{Loop gain}\label{fig:pcb:amp:stab:loop_gain}
 \end{figure}
 %
