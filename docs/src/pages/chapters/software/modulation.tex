@@ -24,11 +24,11 @@ void AudioProcessor::run() {
 \end{lstlisting}
 \end{mdframed}
 %
-First the samples captured from the audio input are fetched from the \lstcpp{AudioProcessor::samples} queue. As the signal recorded with ALSA is a regular audio signal the samplingrate goes up to $48kHz$ depending on the configuration. The resulting signal however should have a samplingrate above \dots. This means the signal needs to be resampled. This can be realised with different forms of interpolation. In this example the zero order hold variant is used.\p
+First the samples captured from the audio input are fetched from the \lstcpp{AudioProcessor::samples} queue. As the signal recorded with ALSA is a regular audio signal the samplingrate goes up to $48kHz$ depending on the configuration. The resulting signal however should have a samplingrate above \dots. Therefore the signal needs to be resampled. This can be realised with different forms of interpolation. In this example the zero order hold variant is used.\p
 %
 As the \lstcpp{Modulator} class is instantiated a time vector with the target samplingrate and a size corresponding to the number of recorded samples is created. The modulation is calculated for every sample by iterating over the time vector.\p
 %
-Listing \ref{lst:software:mod:am} and \ref{lst:software:mod:fm} show the C++ implementations of the AM and FM explained in section \ref{sec:theory:mod}.
+Listing \ref{lst:software:mod:am} and \ref{lst:software:mod:fm} show the C++ implementations of the AM and FM explained in section \secref{sec:theory:mod}.
 %
 \begin{mdframed}
 \begin{lstlisting}[caption=Amplitude modulation, label=lst:software:mod:am]

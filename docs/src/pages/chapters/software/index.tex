@@ -2,11 +2,12 @@
 
 The software of the speaker has two main goals: Controlling the movement and playing an audio signal from an external source over SPI. Because both parts of the software don't need to interact with each other it was decided to split them up into two separate programs. The Speaker control is written in python but the Sound playback is written in C++ to increase performance.\p
 %
-A Raspberry Pi was chosen to run the software. With it's Linux operating system it provides an easy way to parallize tasks. The Raspberry Pi also has a SPI interface and enough PWM pins to control the Servo Motors.
+A Raspberry Pi 3 Model B+ was chosen to run the software. With it's Linux operating system it provides an easy way to parallize tasks. The Raspberry Pi also has a SPI interface and enough PWM pins to control the Servo Motors.\cite{van_loo_bcm2836_2014}
 
 \section{Sound playback}
 
 The sound playback program starts by reading samples from a connected audio device. Those samples are then modulated and sent over spi with the right samplingrate. In order to generate a fluent audio playback the tasks where splitted into three threads. The whole sequence of the program is shown in figure \ref{fig:software:sound_sequence}.\p
+%
 Reading audio samples and modulating them is done in the class \lstcpp{AudioProcessor}. The SPI transmission is handled in the class \lstcpp{Speaker}. Both classes are built with the singleton pattern.
 %
 \begin{figure}
@@ -14,10 +15,40 @@ Reading audio samples and modulating them is done in the class \lstcpp{AudioProc
   \includegraphics[width=\textwidth]{src/assets/pictures/software/sequence_diagramm.png}
   \caption{Sound playback sequence diagram}\label{fig:software:sound_sequence}
 \end{figure}
-%
-The communication between threads is handlend with a queue (Listing \dots). This implementation makes the \lstcpp{std::queue} threadsafe by using a lock to access the underlying queue and also blocks the thread if no data is available. \dots \textit{explanation} \dots This is usefull because for example there is no need to send data over SPI when no new sample is generated.\p
+\p
+The communication between threads is handlend with a queue. The implementation shown in listing \ref{lst:software:queue} makes the \lstcpp{std::queue} threadsafe by using a lock to access the underlying queue and also blocks the thread if no data is available. This is usefull, among other things, because there is no need to send data over SPI when no new sample is generated.\p
 %
 A hardware abstraction layer is used to separate logic and hardware interfaces.
+%
+\begin{mdframed}
+\begin{lstlisting}[caption=Threadsafe and blocking queue, label=lst:software:queue]
+template <class T> class BlockingQueue : public queue<T> {
+  public:
+  void push(T item) {
+    {
+      unique_lock<std::mutex> lck(lock);
+      queue<T>::push(item);
+    }
+    not_empty.notify_one();
+  }
+
+  T pop() {
+    unique_lock<std::mutex> lck(lock);
+    not_empty.wait(lck, [this]() { return queue<T>::size() > 0; });
+
+    T value = queue<T>::front();
+    queue<T>::pop();
+    return value;
+  }
+
+  bool notEmpty() { return !queue<T>::empty(); }
+
+  private:
+  std::mutex lock;
+  condition_variable not_empty;
+};
+\end{lstlisting}
+\end{mdframed}
 
 \input{src/pages/chapters/software/audio-in.tex}
 \input{src/pages/chapters/software/modulation.tex}

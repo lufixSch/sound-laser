@@ -17,13 +17,13 @@ With the amplitude modulation the amplitude of the carrier signal $c(t)$ is chan
 The AM is generally defined as follows:
 %
 \begin{align}
-  AM(t) &= U_0 \cdot (1 + m \cdot s(t)) \cdot c(t)
+  AM(t) &= U_0 \cdot [1 + m \cdot s(t)] \cdot c(t)
 \end{align}
 %
 Usually the carrier signal is a sine or cosine wave with the carrier frequency $f_c$.
 %
 \begin{align}
-  AM(t) &= U_0 \cdot (1 + m \cdot s(t)) \cdot \cos (2 \pi \cdot f_c \cdot t)
+  AM(t) &= U_0 \cdot [1 + m \cdot s(t)] \cdot \cos (2 \pi \cdot f_c \cdot t)\label{eq:theory:mod:am}
 \end{align}
 %
 \subsubsection*{FM}
@@ -32,15 +32,110 @@ Using frequency modulation the frequency of the carrier signal $c(t, f)$ is chan
 The FM is generally defined as follows:
 %
 \begin{align}
-  FM(t) &= U_0 \cdot c(t, 2 \pi \cdot f_c \cdot (1 + m \cdot s(t)))\pmath
-  FM(t) &= U_0 \cdot \cos (2 \pi \cdot f_c \cdot (1 + m \cdot s(t)) \cdot t)
+  FM(t) &= U_0 \cdot c(t, 2 \pi \cdot f_c \cdot [1 + m \cdot s(t)])\pmath
+  FM(t) &= U_0 \cdot \cos (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t) \label{eq:theory:mod:fm}
 \end{align}
 
 \subsection{Demodulation}
 
+In order to recreate audible sound from the modulated signal it has to be demodulated. In the case of a parametric array non-linear behaviour of the air leads to the demodulation of AM as well as FM signals.\p
+%
+In linear acoustics it is presumed, that sound waves don't interact with each other but just superimpose on each. However in reality, when two sound waves collide some local temperaturechanges occur resulting in an inhomogene transmissionmedium. Therefore if two waves spread into the same direction their propagation is affected by each other. The resulting wave is described as an inhomogeneous wave equation by Westervelt (Equation \ref{eq:theory:mod:westervelt}).\cite{westervelt_parametric_1963}\cite{yoneyama_audio_1983}
+%
+\begin{align}
+  \triangledown^2 p_s - \frac{1}{c_0^2} \cdot \frac{\partial^2 p_s}{\partial t^2} & = - p_0 \frac{\partial q}{\partial t}\label{eq:theory:mod:westervelt}\pmath
+  q &= \frac{\beta}{\rho_0^2 c_0^4} \cdot \cfrac{\partial }{\partial t} p_1^2 \label{eq:theory:mod:westervelt_q}
+\end{align}
+%
+$p_1$ and $p_s$ are the sound pressure of the the primary and secondary wave. $\beta$ is the nonlinear fluid parameter and $c_0$ is the sound velocity.
+
 \subsubsection*{AM}
 
+Considering equation \ref{eq:theory:mod:am} the sound pressure of an AM signal can be described as shown in equation \ref{eq:theory:mod:am_pressure} and \ref{eq:theory:mod:am_pressure_radius}.
+%
+\begin{align}
+  p_1(t) &= p_0 \cdot (1 + m \cdot s(t)) \cdot \cos (2 \pi \cdot f_c \cdot t)\label{eq:theory:mod:am_pressure}\pmath
+  p_1(t, r) &= p_0 e^{- \alpha r} \cdot \left[1 + m \cdot s\left(t - \frac{r}{c_0}\right)\right] \cdot \cos \left(2 \pi \cdot f_c \cdot \left[t - \frac{r}{c_0}\right]\right)\label{eq:theory:mod:am_pressure_radius}
+\end{align}
+%
+$p_0$ is the initial pressure, $r$ is the distance from the speaker and $e^{- \alpha r}$ describes the damping of the wave over this distance.
+%
+\begin{align}
+  p_s(t) = \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \frac{\partial^2}{\partial t^2} E^2(t - \frac{r}{c_0})\label{eq:theory:mod:berktay}
+\end{align}
+%
+Where $S$ is the area of the parametric array and $E(t - \cfrac{r}{c_0})$ is the function envelope of $p_1(t,r)$.\p
+Considering the \cite[Berktay far-field solution]{bai_analysis_2012} shown in equation \ref{eq:theory:mod:berktay} the sound pressure of the secondary wave can be described as following:
+%
+\begin{align}
+  p_s(t) = \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \frac{\partial^2}{\partial t^2} \left[ 2 m \cdot s\left(t - \frac{r}{c_0}\right) + m^2 \cdot s^2\left(t - \frac{r}{c_0}\right)\right]
+\end{align}
+%
+This shows the original signal as well as distortion. But with a modulation depth $m < 1$ the distortion will always be smaller than the signal.
+
+%This equation can now be inserted into equation \ref{eq:theory:mod:westervelt_q}.
+%
+%\begin{align}
+%  q &= \frac{\beta \cdot p_0^2}{\rho_0^2 c_0^4 } e^{- 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left(\left[1 + m \cdot s\left(t - \frac{r}{c_0}\right)\right]^2 \cdot \cos^2 \left(2 \pi \cdot f_c \cdot \left[t - \frac{r}{c_0}\right]\right)\right)\pmath
+%  \mathrm{with\space}\cos^2(x) &= \frac{1}{2} \cos (2x) + 1\pmath
+%  q &= \frac{\beta \cdot p_0^2}{\rho_0^2 c_0^4 } e^{- 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left(\left[1 + m \cdot s\left(t - \frac{r}{c_0}\right)\right]^2 \cdot \frac{1}{2} \left[ 1 + \cos \left(4 \pi \cdot f_c \cdot \left[t - \frac{r}{c_0}\right]\right)\right]\right)
+%\end{align}
+%
+%Because of a damping effect of $12dB/oct$ the cosine is negligible leaving the original signal and some distortion. But with a modulation depth $m < 1$ the distortion will always be smaller than the signal.
+%
+%\begin{align}
+%  q &= \frac{\beta \cdot p_0^2}{\rho_0^2 c_0^4 } e^{- 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left[ m \cdot s\left(t - \frac{r}{c_0}\right) + \frac{1}{2} m^2 \cdot s^2\left(t - \frac{r}{c_0}\right)\right]
+%\end{align}
+%
+%Using equation \ref{eq:theory:mod:weservelt} the sound pressure of the secondary wave can be described as following:
+%
+%\begin{align}
+
+%\end{align}
+%
+
 \subsubsection*{FM}
+
+As with the AM the sound pressure of the FM signal is described using equation \ref{eq:theory:mod:fm}.
+%
+\begin{align}
+  p_1(t) &= p_0 \cdot \cos (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t)\pmath
+  p_1(t, r) &= p_0 e^{- \alpha r} \cdot \cos (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t)
+\end{align}
+%
+Using the relation between phase and frequency the FM signal is modified.
+%
+\begin{align}
+ \int \omega(t) &= \varphi(t)\pmath
+ 2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] &= 2 \pi \cdot f_c t + \int m \cdot s(t)\pmath
+ \implies \space p_1(t, r) &= p_0 e^{- \alpha r} \cdot \cos (2 \pi \cdot f_c t + \int m \cdot s(t))
+\end{align}
+%
+%This equation is than inserted into equation \ref{eq:theory:mod:westervelt_q}
+%
+%\begin{align}
+%  q &= \frac{\beta \cdot p_0^2}{\rho_0^2 c_0^4 } e^{- 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left( \cos^2 (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t) \right)\pmath
+%  \mathrm{with\space}\cos^2(x) &= \frac{1}{2} \cos (2x) + 1\pmath
+%  q &= \frac{\beta \cdot p_0^2}{\rho_0^2 c_0^4 } e^{- 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \cdot \frac{1}{2} \left(1 + \cos (4 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t) \right)\pmath
+%\end{align}
+%
+Assume:
+%
+\begin{align}
+  E(t) =& \int m \cdot s(t)\pmath
+  g(t) =& \cos^2 (2 \pi \cdot f_c t + E(t))\pmath
+  g'(t) =& - \cos (2 \pi \cdot f_c t + E(t)) \sin (2 \pi \cdot f_c t + E(t)) (2 \pi \cdot f_c + E'(t)) \pmath
+  g''(t) =& \sin^2 (2 \pi \cdot f_c t + E(t)) (2 \pi \cdot f_c + E'(t))^2 \pmath
+  &- \cos^2 (2 \pi \cdot f_c t + E(t)) (2 \pi \cdot f_c + E'(t))^2 \pmath
+  &- \cos (2 \pi \cdot f_c t + E(t)) \sin (2 \pi \cdot f_c t + E(t)) E''(t) \pmath
+\end{align}
+%
+Now the FM signal can be inserted into the Berktay far-field solution (Equation \ref{eq:theory:mod:berktay}).
+%
+\begin{align}
+  p_s(t) = \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \frac{\partial^2}{\partial t^2} \cos^2 \left(2 \pi \cdot f_c \cdot g\left(t - \frac{r}{c_0}\right) \cdot t - \frac{r}{c_0}\right)
+\end{align}
+%
 
 \subsection{Bandwith}
 

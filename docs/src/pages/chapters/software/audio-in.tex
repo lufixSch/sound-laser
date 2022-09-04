@@ -2,11 +2,11 @@
 %
 There are different methods to connect an external audio device to the Raspberry Pi. The Raspberry provides an AUX port where the microphone line could be used as input. An alternative would be to use an external USB audio card or a audio card HAT with a dedicated AUX IN port. The third variant would be to connect the device over bluetooth.\p
 %
-Because of the current shortage off Raspberry Pi's and Raspberry Pi accessories a HAT isn't really an option. In order to use the Raspberry as a bluetooth speaker some complicated configuration and programming of the bluetooth interface has to be done, which would cost a lot of time. The integrated audio interface of the Raspberry Pi could be used but it is known to have a mediocre sound quality. Therefore the best option would be an external USB audio card. But during research the open source tool BlueZ-Alsa\cite{bokowy_bluez-alsa_2022} was found. This program makes it possible to configure the Raspberry Pi as bluetooth audio speaker with one simple command. The connected device (Audio in/out depending on the configuration) can then be accessed using ALSA.
+Because of the current shortage off Raspberry Pi's and Raspberry Pi accessories a HAT isn't really an option. In order to use the Raspberry as a bluetooth speaker some complicated configuration and programming of the bluetooth interface has to be done, which would cost a lot of time. The integrated audio interface of the Raspberry Pi could be used but it is known to have a mediocre sound quality. Therefore the best option would be an external USB audio card. However during research the open source tool BlueZ-Alsa\cite{bokowy_bluez-alsa_2022} was found. This program makes it possible to configure the Raspberry Pi as bluetooth audio speaker with one simple shell-command. The connected device (Audio in/out depending on the configuration) can then be accessed using the Advanced Linux Sound Architecture (ALSA).
 %
 \subsubsection*{ALSA interface}
 
-The interface to ALSA is the HAL class \lstcpp{PCM}. On construction it takes a device name, channel count and samplingrate. With those parameters the ALSA PCM device is configured using the \textbf{ALSA} C library (Listing \ref{lst:software:audio_in:pcm_config}).\cite{noauthor_alsa_nodate} The configuration is based on an example of the ALSA Audio API tutorial from Paul Davis.\cite{davis_tutorial_nodate}\p
+The interface to ALSA is the HAL class \lstcpp{PCM}. On construction it takes a device name, channel count and samplingrate. With those parameters the ALSA PCM device is configured using the \textbf{ALSA} C library (Listing \ref{lst:software:audio_in:pcm_config}).\cite{noauthor_alsa_nodate} The configuration is based on an example of the ALSA Audio API tutorial from Paul Davis.\cite{davis_tutorial_2002}\p
 %
 \begin{mdframed}
 \begin{lstlisting}[caption=ALSA interface configuration, label=lst:software:audio_in:pcm_config]
@@ -69,8 +69,6 @@ PCM::PCM(std::string device_name, char channel_cnt, uint32_t fs) {
 \end{lstlisting}
 \end{mdframed}
 %
-\dots \textit{code explanation} \dots\p
-%
 After the configuration the method \lstcpp{readFrames()} can be used to read a given number of samples (Listing \ref{lst:software:audio_in:pcm_read}). The method will block the code execution until all frames are received or an error occurs.
 %
 \begin{mdframed}
@@ -88,7 +86,7 @@ void PCM::readFrames(sample_t* buffer, size_t frames) {
 %
 \subsubsection*{Record audio}
 %
-The \lstcpp{PCM} class is initialized in \lstcpp{AudioProcessor::configure()}. This instance is then used in the method \lstcpp{record()} shown in listing \dots. \lstcpp{record()} creates a loop in wich a set of samples is read into a buffer and then pushed into the \lstcpp{AudioProcessor::samples} queue. The method can be executed directly or by execution \lstcpp{record_thread()} which creates a new thread for the loop.
+The \lstcpp{PCM} class is initialized in \lstcpp{AudioProcessor::configure()}. This instance is then used in the method \lstcpp{record()} shown in listing \ref{lst:software:audio_in:record}. The method creates a loop in wich a set of samples is read into a buffer and then pushed into the \lstcpp{AudioProcessor::samples} queue. \lstcpp{record()} can be executed directly or by calling \lstcpp{record_thread()} which creates a new thread for the loop.
 
 \begin{mdframed}
 \begin{lstlisting}[caption=Record loop, label=lst:software:audio_in:record]

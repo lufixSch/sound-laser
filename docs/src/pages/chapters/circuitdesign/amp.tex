@@ -52,8 +52,7 @@ The amplification can be calculated like a non-inverting amplifier. In order to 
   V = 1 + \frac{R_3}{R_4}
 \end{align}
 %
-As described above a power amplifier is needed to drive the high current of the ultrasonic transducers. A class B amplifier was chosen because of its simple but powerefficient design. Usually this design causes crossover distortion. This is solved by putting the feedback behind the power amplifier. Note, this circuit design is only possible if the OpAmp is powerfull enough to drive the base current of the transistors. A better solution for higher currents would be to use the more complex class AB power amplifier.\p
-%
+As described above a power amplifier is needed to drive the high current of the ultrasonic transducers. A class B amplifier was chosen because of its simple but powerefficient design.\cite{okorn_halbleiterschaltung_2020} Usually this design causes crossover distortion but this is solved by putting the feedback behind the power amplifier. Note, this circuit design is only possible if the OpAmp is powerfull enough to drive the base current of the transistors. A better solution for higher currents would be to use the more complex class AB power amplifier.
 \subsubsection*{Voltage output}
 At the output of the circuit a highpass filter is used to filter the $12V$ DC voltage caused by the voltage divider at the input.
 %
@@ -67,8 +66,7 @@ Because the behaviour of this highpass depends on the $ESR$ and capacity of all 
 
 \subsection{Stability}
 
-As mentioned before the feedback of the amplification circuit includes a capacitance. To improve stability OpAmps are usually phase compensated to represent a first order lowpass. Introducing a capacitance into the feedback could disturbed the Stability of the circuit.
-%
+As mentioned before the feedback of the amplification circuit includes a capacitance. To improve stability OpAmps are usually phase compensated to represent a first order lowpass. Introducing a capacitance into the feedback could disturbed the Stability of the circuit.\cite{okorn_analoge_2021}\p
 A general amplification circuit can be represented as shown in figure \ref{fig:pcb:amp:stab:block}. The output signal can therefore be represented as shown in equation \ref{eq:pcb:amp:stab:ua}.
 %
 \begin{align}
@@ -79,7 +77,7 @@ A general amplification circuit can be represented as shown in figure \ref{fig:p
 \begin{figure}
   \centering
   \includegraphics[width=0.8\textwidth]{src/assets/pictures/circuit/amp_block_circuit.png}
-  \caption{Block circuit of an amplification circuit}\label{fig:pcb:amp:stab:block}
+  \caption{Block circuit of an amplification circuit\cite{okorn_analoge_2021}}\label{fig:pcb:amp:stab:block}
 \end{figure}
 %
 This results in the circuit being unstable if $kA_d = -1$.
@@ -92,14 +90,14 @@ This results in the circuit being unstable if $kA_d = -1$.
 In order to verify the stability, $\underbar{A}_d$ and $\underbar{k}$ for the amplifier circuit where calculated.
 %
 \begin{align}
-  A_d &= \frac{A_0}{1 + \frac{s}{w_g}}\pmath
+  \underbar{A}_d &= \frac{A_0}{1 + \frac{s}{w_g}}\pmath
   w_g &= 2\pi \cdot \frac{GBW}{A_0}
 \end{align}
 %
-The open loop gain $A_0$ as well as the $GBW$ were taken from the data sheet.\cite{noauthor_tl08xx_2021}
+The open loop gain $A_0$ as well as the $GBW$ were taken from the data sheet.\cite{texas_instruments_tl08xx_2021}
 %
 \begin{align}
-  k &= \frac{1 + s C_9 R_4}{1 + s C_9 (R_4 + R_3)}
+  \underbar{k} &= \frac{1 + s C_9 R_4}{1 + s C_9 (R_4 + R_3)}
 \end{align}
 %
 Figure \ref{fig:pcb:amp:stab:loop_gain} shows the bodeplot of $\underbar{k}\underbar{A}_d$. It can be observed that the amplifier still has a phase reserve of $55^\circ$, which is enough to keep it stable.
