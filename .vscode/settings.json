@@ -3,5 +3,6 @@
   "esbonio.sphinx.confDir": "",
   "files.associations": {
     "chrono": "cpp"
-  }
+  },
+  "cmake.sourceDirectory": "${workspaceFolder}/software/audio"
 }
