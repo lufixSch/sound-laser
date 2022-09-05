@@ -2,11 +2,11 @@
 
 The software of the speaker has two main goals: Controlling the movement and playing an audio signal from an external source over SPI. Because both parts of the software don't need to interact with each other it was decided to split them up into two separate programs. The Speaker control is written in python but the Sound playback is written in C++ to increase performance.\p
 %
-A Raspberry Pi 3 Model B+ was chosen to run the software. With it's Linux operating system it provides an easy way to parallize tasks. The Raspberry Pi also has a SPI interface and enough PWM pins to control the Servo Motors.\cite{van_loo_bcm2836_2014}
+A Raspberry Pi 3 Model B+ was chosen to run the software. With its Linux operating system it provides an easy way to parallize tasks. The Raspberry Pi also has a SPI interface and enough PWM pins to control the Servo Motors.\cite{van_loo_bcm2836_2014}
 
-\section{Sound playback}
+\section{Sound Playback}
 
-The sound playback program starts by reading samples from a connected audio device. Those samples are then modulated and sent over spi with the right samplingrate. In order to generate a fluent audio playback the tasks where splitted into three threads. The whole sequence of the program is shown in figure \ref{fig:software:sound_sequence}.\p
+The sound playback program starts by reading samples from a connected audio device. Those samples are then modulated and sent over SPI with the right sampling rate. In order to generate a fluent audio playback the tasks where splitted into three threads. The whole sequence of the program is shown in figure \ref{fig:software:sound_sequence}.\p
 %
 Reading audio samples and modulating them is done in the class \lstcpp{AudioProcessor}. The SPI transmission is handled in the class \lstcpp{Speaker}. Both classes are built with the singleton pattern.
 %
@@ -54,5 +54,5 @@ template <class T> class BlockingQueue : public queue<T> {
 \input{src/pages/chapters/software/modulation.tex}
 \input{src/pages/chapters/software/spi.tex}
 
-\section{Speaker movement}
+\section{Speaker Movement}
 \input{src/pages/chapters/software/movement.tex}

@@ -1,19 +1,19 @@
 \section{Modulation}\label{sec:theory:mod}
 
-\begin{enumerate}
-  \item Demodulation
-  \item Differences
-  \subitem bandwith
-  \subitem noise/disturbance
-  \item Bandwith
-\end{enumerate}
+%\begin{enumerate}
+%  \item Demodulation
+%  \item Differences
+%  \subitem bandwith
+%  \subitem noise/disturbance
+%  \item Bandwith
+%\end{enumerate}
 %
 Modulation in electronics describes the process of altering parameters of a carrier wave depending on an input signal. This will transfer the frequency of the input signal so it can be transmitted for example via radio wave. The receiver can then demodulate the signal to retrieve the original.
 
-\subsection{Modulationtechniques}
+\subsection{Modulation Techniques}
 
 \subsubsection*{AM}
-With the amplitude modulation the amplitude of the carrier signal $c(t)$ is changed depending on the modulating signal $s(t)$. The modulation depth $m$ defines to wich grade the amplitude is modified. With the parameter $U_0$ the offset of the modulating signal can be changed.\p
+With the amplitude modulation the amplitude of the carrier signal $c(t)$ is changed depending on the modulating signal $s(t)$. The modulation depth $m$ defines to which grade the amplitude is modified. With the parameter $U_0$ the offset of the modulating signal can be changed.\p
 The AM is generally defined as follows:
 %
 \begin{align}
@@ -28,7 +28,7 @@ Usually the carrier signal is a sine or cosine wave with the carrier frequency $
 %
 \subsubsection*{FM}
 %
-Using frequency modulation the frequency of the carrier signal $c(t, f)$ is changed by the modulating signal $s(t)$. The modulation depth $m$ defines to wich grade the frequency is modified. With the parameter $U_0$ the amplitude of the carrier is defined.\p
+Using frequency modulation the frequency of the carrier signal $c(t, f)$ is changed by the modulating signal $s(t)$. The modulation depth $m$ defines to which grade the frequency is modified. With the parameter $U_0$ the amplitude of the carrier is defined.\p
 The FM is generally defined as follows:
 %
 \begin{align}
@@ -47,7 +47,7 @@ In linear acoustics it is presumed, that sound waves don't interact with each ot
   q &= \frac{\beta}{\rho_0^2 c_0^4} \cdot \cfrac{\partial }{\partial t} p_1^2 \label{eq:theory:mod:westervelt_q}
 \end{align}
 %
-$p_1$ and $p_s$ are the sound pressure of the the primary and secondary wave. $\beta$ is the nonlinear fluid parameter and $c_0$ is the sound velocity.
+$p_1$ and $p_s$ are the sound pressure of the the primary and secondary wave, $\beta$ is the nonlinear fluid parameter and $c_0$ is the sound velocity.
 
 \subsubsection*{AM}
 
@@ -58,20 +58,34 @@ Considering equation \ref{eq:theory:mod:am} the sound pressure of an AM signal c
   p_1(t, r) &= p_0 e^{- \alpha r} \cdot \left[1 + m \cdot s\left(t - \frac{r}{c_0}\right)\right] \cdot \cos \left(2 \pi \cdot f_c \cdot \left[t - \frac{r}{c_0}\right]\right)\label{eq:theory:mod:am_pressure_radius}
 \end{align}
 %
-$p_0$ is the initial pressure, $r$ is the distance from the speaker and $e^{- \alpha r}$ describes the damping of the wave over this distance.
+$p_0$ is the initial pressure, $r$ is the distance from the speaker and $e^{- \alpha r}$ describes the damping of the wave over this distance.\p
+$p_1$ is now inserted into equation \ref{eq:theory:mod:westervelt_q}.
+%
+\begin{align}
+  q &= \frac{\beta p_0^2}{\rho_0^2 c_0^4} e^{ - 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left[1 + m \cdot s\left(t - \frac{r}{c_0}\right)\right]^2 \cdot \cos^2 \left(2 \pi \cdot f_c \cdot \left[t - \frac{r}{c_0}\right]\right)\pmath
+  &\mathrm{with~} \cos^2(\varphi) = \frac{1}{2} [1 + \cos (2 \varphi)]\pmath
+  q &= \frac{\beta p_0^2}{\rho_0^2 c_0^4} e^{ - 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left[1 + m \cdot s\left(t - \frac{r}{c_0}\right)\right]^2 \cdot \left[1 + \cos \left(4 \pi \cdot f_c \cdot \left[t - \frac{r}{c_0}\right]\right)\right]
+\end{align}
+%
+As the focus of the demodulation is audible sound all signals in the ultrasonic range are negligible.
+%
+\begin{align}
+  q &= \frac{\beta p_0^2}{\rho_0^2 c_0^4} e^{ - 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left[1 + m \cdot s\left(t - \frac{r}{c_0}\right)\right]^2
+\end{align}
+%
+If this solution is now inserted into equation \ref{eq:theory:mod:westervelt} it can be solved for $p_s$. The result is known under the \cite[Berktay far-field solution]{bai_analysis_2012}
 %
 \begin{align}
   p_s(t) = \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \frac{\partial^2}{\partial t^2} E^2(t - \frac{r}{c_0})\label{eq:theory:mod:berktay}
 \end{align}
 %
 Where $S$ is the area of the parametric array and $E(t - \cfrac{r}{c_0})$ is the function envelope of $p_1(t,r)$.\p
-Considering the \cite[Berktay far-field solution]{bai_analysis_2012} shown in equation \ref{eq:theory:mod:berktay} the sound pressure of the secondary wave can be described as following:
+Equation \ref{eq:theory:mod:am_result} shows the demodulated AM signal using the Berktay far-field solution. The demodulation results not only in the original signal but distortion from the interaction between lower and upper sideband. However with a modulation depth $m < 1$ the distortion will always be smaller than the signal.
 %
 \begin{align}
-  p_s(t) = \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \frac{\partial^2}{\partial t^2} \left[ 2 m \cdot s\left(t - \frac{r}{c_0}\right) + m^2 \cdot s^2\left(t - \frac{r}{c_0}\right)\right]
+  p_s(t) = \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \frac{\partial^2}{\partial t^2} \left[ 2 m \cdot s\left(t - \frac{r}{c_0}\right) + m^2 \cdot s^2\left(t - \frac{r}{c_0}\right)\right]\label{eq:theory:mod:am_result}
 \end{align}
 %
-This shows the original signal as well as distortion. But with a modulation depth $m < 1$ the distortion will always be smaller than the signal.
 
 %This equation can now be inserted into equation \ref{eq:theory:mod:westervelt_q}.
 %
@@ -96,49 +110,82 @@ This shows the original signal as well as distortion. But with a modulation dept
 
 \subsubsection*{FM}
 
-As with the AM the sound pressure of the FM signal is described using equation \ref{eq:theory:mod:fm}.
-%
-\begin{align}
-  p_1(t) &= p_0 \cdot \cos (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t)\pmath
-  p_1(t, r) &= p_0 e^{- \alpha r} \cdot \cos (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t)
-\end{align}
-%
-Using the relation between phase and frequency the FM signal is modified.
-%
-\begin{align}
- \int \omega(t) &= \varphi(t)\pmath
- 2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] &= 2 \pi \cdot f_c t + \int m \cdot s(t)\pmath
- \implies \space p_1(t, r) &= p_0 e^{- \alpha r} \cdot \cos (2 \pi \cdot f_c t + \int m \cdot s(t))
-\end{align}
-%
-%This equation is than inserted into equation \ref{eq:theory:mod:westervelt_q}
-%
-%\begin{align}
-%  q &= \frac{\beta \cdot p_0^2}{\rho_0^2 c_0^4 } e^{- 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left( \cos^2 (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t) \right)\pmath
-%  \mathrm{with\space}\cos^2(x) &= \frac{1}{2} \cos (2x) + 1\pmath
-%  q &= \frac{\beta \cdot p_0^2}{\rho_0^2 c_0^4 } e^{- 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \cdot \frac{1}{2} \left(1 + \cos (4 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t) \right)\pmath
-%\end{align}
-%
-Assume:
-%
-\begin{align}
-  E(t) =& \int m \cdot s(t)\pmath
-  g(t) =& \cos^2 (2 \pi \cdot f_c t + E(t))\pmath
-  g'(t) =& - \cos (2 \pi \cdot f_c t + E(t)) \sin (2 \pi \cdot f_c t + E(t)) (2 \pi \cdot f_c + E'(t)) \pmath
-  g''(t) =& \sin^2 (2 \pi \cdot f_c t + E(t)) (2 \pi \cdot f_c + E'(t))^2 \pmath
-  &- \cos^2 (2 \pi \cdot f_c t + E(t)) (2 \pi \cdot f_c + E'(t))^2 \pmath
-  &- \cos (2 \pi \cdot f_c t + E(t)) \sin (2 \pi \cdot f_c t + E(t)) E''(t) \pmath
-\end{align}
-%
-Now the FM signal can be inserted into the Berktay far-field solution (Equation \ref{eq:theory:mod:berktay}).
-%
-\begin{align}
-  p_s(t) = \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \frac{\partial^2}{\partial t^2} \cos^2 \left(2 \pi \cdot f_c \cdot g\left(t - \frac{r}{c_0}\right) \cdot t - \frac{r}{c_0}\right)
-\end{align}
-%
+Using the same approach as with the AM signal, the demodulation of the FM signal can be calculated as well. Having said this the process is mostly ignored when talking about parametric speaker arrays and therefore information about it is quite rare. Usually the effect is only verified empirically. The paper of Masato Nakayama and Takanobu Nishiura gives an idea on how the mathematical solution might look.\cite{nakayama_synchronized_2017}
 
+%As with the AM the sound pressure of the FM signal is described using equation \ref{eq:theory:mod:fm}.
+%%
+%\begin{align}
+%  p_1(t) &= p_0 \cdot \cos (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t)\pmath
+%  p_1(t, r) &= p_0 e^{- \alpha r} \cdot \cos (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t)
+%\end{align}
+%%
+%Using the relation between phase and frequency the FM signal is modified.
+%%
+%\begin{align}
+% \int \omega(t) &= \varphi(t)\pmath
+% 2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] &= 2 \pi \cdot f_c t + \int m \cdot s(t)\pmath
+% \implies p_1(t, r) &= p_0 e^{- \alpha r} \cdot \cos (2 \pi \cdot f_c t + \int m \cdot s(t))
+%\end{align}
+%%
+%%This equation is than inserted into equation \ref{eq:theory:mod:westervelt_q}
+%%
+%%\begin{align}
+%%  q &= \frac{\beta \cdot p_0^2}{\rho_0^2 c_0^4 } e^{- 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left( \cos^2 (2 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t) \right)\pmath
+%%  \mathrm{with\space}\cos^2(x) &= \frac{1}{2} \cos (2x) + 1\pmath
+%%  q &= \frac{\beta \cdot p_0^2}{\rho_0^2 c_0^4 } e^{- 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \cdot \frac{1}{2} \left(1 + \cos (4 \pi \cdot f_c \cdot [1 + m \cdot s(t)] \cdot t) \right)\pmath
+%%\end{align}
+%%
+%Assume:
+%%
+%\begin{align}
+%  g(t) =& \int m \cdot s(t)\pmath
+%  E(t) =& \cos^2 (2 \pi \cdot f_c t + g(t))
+%\end{align}
+%%
+%Now the signal $E(t)$ can be inserted into the Berktay far-field solution (Equation \ref{eq:theory:mod:berktay}).
+%%
+%\begin{align}
+%  p_s(t) =& \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \frac{\partial^2}{\partial t^2} \cos^2 (2 \pi \cdot f_c t + g(t))
+%  %p_s(t) =& \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \left[\sin^2 (2 \pi \cdot f_c t + G(t)) (2 \pi \cdot f_c + g'(t))^2\right. \pmath
+%  %&- \cos^2 (2 \pi \cdot f_c t + g(t)) (2 \pi \cdot f_c + g'(t))^2 \pmath
+%  %&\left.- \cos (2 \pi \cdot f_c t + g(t)) \sin (2 \pi \cdot f_c t + g(t)) g''(t)\right] \pmath
+%\end{align}
+%%
+%Next the signal is differentiated.
+%%
+%\begin{align}
+%  \frac{\partial }{\partial t} E(t) =& - 2\cos (2 \pi \cdot f_c t + g(t)) \sin (2 \pi \cdot f_c t + g(t)) (2 \pi \cdot f_c + g'(t)) \pmath
+%  \frac{\partial^2 }{\partial t^2} E(t) =& 2\sin^2 (2 \pi \cdot f_c t + G(t)) (2 \pi \cdot f_c + g'(t))^2 \pmath
+%  &- 2\cos^2 (2 \pi \cdot f_c t + g(t)) (2 \pi \cdot f_c + g'(t))^2 \pmath
+%  &- 2\cos (2 \pi \cdot f_c t + g(t)) \sin (2 \pi \cdot f_c t + g(t)) g''(t) \pmath
+%  %
+%  \mathrm{with\space} \cos^2(\varphi) &= \frac{1}{2} [1 + \cos (2\varphi)] \mathrm{\space and \space} \sin^2(\varphi) = \frac{1}{2} [1 - \cos (2\varphi)]\pmath
+%  %
+%  \frac{\partial^2 }{\partial t^2} E(t) =& [1 - \cos(4 \pi \cdot f_c t + G(t)] [2 \pi \cdot f_c + g'(t)]^2 \pmath
+%  &- [1 + \cos(4 \pi \cdot f_c t + g(t)][2 \pi \cdot f_c + g'(t)]^2 \pmath
+%  &- \cos(2 \pi \cdot f_c t + g(t)) \sin (2 \pi \cdot f_c t + g(t)) g''(t) \pmath
+%\end{align}
+%%
+%As the focus of the demodulation is audible sound, all ultrasonic frequencies are negligible, leaving only the first derivative $g'(t)$.
+%%
+%\begin{align}
+%  \frac{\partial^2 }{\partial t^2} E(t) =& [1 - \cos(4 \pi \cdot f_c t + G(t)] [2 \pi \cdot f_c + g'(t)]^2 \pmath
+%  &- [1 + \cos(4 \pi \cdot f_c t + g(t)][2 \pi \cdot f_c + g'(t)]^2 \pmath
+%  &- \cos(2 \pi \cdot f_c t + g(t)) \sin (2 \pi \cdot f_c t + g(t)) g''(t) \pmath
+%\end{align}
 \subsection{Bandwith}
 
 \subsubsection*{AM}
 
+The bandwith calculation of an amplitude modulated signal is straightforward as the modulation just creates an upper and lower sideband at $f_c \pm f_s$.\cite{netzberger_kommunikationstechnologie_2021-1} Where $f_c$ is the carrier frequency and $f_s$ is the signal frequency.\p
+As the highest tone a human can hear lies at about $20kHz$, this would result in a maximum bandwith of $f_c \pm 20kHz$. With a carrier frequency of $40kHz$ the highest frequency of the modulated signal would lie at $60kHz$. Reducing the highest tone to $8kHz$, which is enough for most audio would reduce this value to $48kHz$.
+
 \subsubsection*{FM}
+
+In theory the frequency spectrum of a frequency modulated signal is infinite with decreasing pulses at $f_c \pm n \cdot f_s$. However the bandwith can be limited without causing significant damage to the original signal.\cite{netzberger_kommunikationstechnologie_2021-1}
+%
+\begin{align}
+  B =& 2 (\triangle f + f_s) &\textrm{with~} \triangle f = m \cdot f_c
+\end{align}
+%
+With a modulation depth of $0.05$, a carrier frequency of $40kHz$ and a maximum signal frequency of $20kHz$ this would result in a bandwith of $44kHz$. With a maximum signal frequency of $8kHz$ this would be reduced to $20kHz$. The highest frequency of the modulated signal would therefore be $50kHz$.

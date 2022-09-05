@@ -1,4 +1,4 @@
-\section{Powersupply}
+\section{Power Supply}
 
 %\begin{enumerate}
   %\item Circuit design
@@ -12,13 +12,13 @@
 %\end{enumerate}
 
 Because the speaker will be used with a Raspberry Pi or microcontroller, it should be compatible with an input voltage of $5V$. In order to provide the $24V$ needed by the amplifier circuit a boost converter is used.\p
-The Class B Amplifier is designed to drive up to $100mA$. Aditionally the OpAmp itself and the circuit around it will need some current. Therefore the powersupply should provide at least $200mA$. Apart from this a higher switching frequency would help to reduce interferences at the speaker output.\p
+The Class B amplifier is designed to drive up to $100mA$. Aditionally the OpAmp itself and the circuit around it will need some current. Therefore the power supply should provide at least $200mA$. Apart from this a higher switching frequency would help to reduce interferences at the speaker output.\p
 %
-Considering those requirements the LM2735 boost converter was chosen. Because the power usage of the ultrasonic transducers wasn't clear in the beginning of this project the powersupply provides up to $3A$ output current. The output voltage can be adjusted between $3V$ and $24V$.\cite{texas_instruments_lm2735-q1_2018}
+Considering those requirements the LM2735 boost converter was chosen. Because the power usage of the ultrasonic transducers was not clear in the beginning of this project the power supply provides up to $3A$ output current. The output voltage can be adjusted between $3V$ and $24V$.\cite{texas_instruments_lm2735-q1_2018}
 
 \subsection{Circuit}
 
-Figure \ref{fig:pcb:power_circuit} shows the circuit of the powersupply. The feedback was designed for using the equation given in the datasheet.
+Figure \ref{fig:pcb:power_circuit} shows the circuit of the power supply. The feedback was designed for using the equation given in the datasheet.
 Note, \comp{R1} and \comp{R2} are switched compared to the circuit in the datasheet.
 %
 \begin{align}

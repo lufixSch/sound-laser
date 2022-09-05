@@ -24,4 +24,4 @@ This folder contains the different configurations for the document.
 
 This folder is used for the actual content of the document.
 
-The devicelist folder contains a preset of laboratory equipment wich can be changed and added to the document depending on your needs.
+The devicelist folder contains a preset of laboratory equipment which can be changed and added to the document depending on your needs.
