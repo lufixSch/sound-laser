@@ -2,9 +2,7 @@
 
 Template for bachelor or master thesis. Especially at the FH JOANNEUM.
 
-## Setup
-
-To setup this template for a protocol you can use the python script `./setup/setup.py`. This script will ask you for name, subject, a new repository to connect to etc. All parameters are optional. You can run this script directly or with `make init`
+## Usage
 
 The template works best when working in Visual Studio Code with the [Latex Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) extension. Alternatively you can use the makefile to create the pdf (`make pdf`).
 

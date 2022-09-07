@@ -33,8 +33,6 @@ void AudioProcessor::record() {
     pcm_dev->readFrames(buffer.data(), frame_size);
     samples.push(buffer);
   }
-
-  // free(buffer);
 }
 
 std::thread* AudioProcessor::record_thread() {
@@ -57,8 +55,8 @@ void AudioProcessor::run() {
 
     for (const auto t : mod.time) {
       const auto sig = mapValue(buffer.at(floor(t * sampling_rate)));
-      // const auto sample = mod.AM(sig, t, 0.5f, 0.8f);
-      const auto sample = mod.FM(sig, t, 1.0f, 0.15f);
+      const auto sample = mod.AM(sig, t, 0.5f, 0.8f); // AM
+      // const auto sample = mod.FM(sig, t, 1.0f, 0.15f);   // FM
       speaker->samples.push(speaker->mapSample(sample));
     }
   }

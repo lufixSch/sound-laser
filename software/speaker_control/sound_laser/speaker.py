@@ -3,6 +3,7 @@ from sound_laser.hal.servo import ServoHAL
 import numpy as np
 import warnings
 
+
 class SpeakerControl:
     """Control tilting of the speaker
     """
@@ -51,7 +52,6 @@ class SpeakerControl:
         print(f"sign: {np.sign(a)}, angle: {phi}")
         return np.rad2deg(phi - np.pi/2)
 
-
     def tilt_x(self, angle: float):
         """Tilt speaker around the x axis
 
@@ -59,12 +59,7 @@ class SpeakerControl:
             angle (float): angle in degree
         """
 
-        print("Enter tilt_x")
-
-        try:
-             servo_pos = self._map_position(angle)
-        except Exception as e:
-            print(e)
+        servo_pos = self._map_position(angle)
 
         print(f"Tilt X - {servo_pos}")
 

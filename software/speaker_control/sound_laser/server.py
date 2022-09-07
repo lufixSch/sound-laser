@@ -47,6 +47,18 @@ class Webserver:
         self.web_path = web_directory
         self._create_webserver()
 
+    def _create_webserver(self):
+        """Check content in the web directory and register routes depending on the files in this directory
+        """
+
+        files = os.listdir(self.web_path)
+        routes = self._create_routes(files)
+
+        for route in routes:
+            self.server.router.add_get(f"/{route}", self._webadress_handler)
+
+        self.web_routes = routes
+
     async def _webadress_handler(self, req: web.Request):
         """Handle the requests of any file
 
@@ -90,18 +102,6 @@ class Webserver:
 
         return routes
 
-    def _create_webserver(self):
-        """Check content in the web directory and register routes depending on the files in this directory
-        """
-
-        files = os.listdir(self.web_path)
-        routes = self._create_routes(files)
-
-        for route in routes:
-            self.server.router.add_get(f"/{route}", self._webadress_handler)
-
-        self.web_routes = routes
-
 
 class API:
     """REST API for different Usecases
@@ -110,6 +110,15 @@ class API:
     def __init__(self, server: web.Application) -> None:
         self.server = server
         self._create_api()
+
+    def _create_api(self):
+        """Register different routes for the API
+        """
+
+        self.speaker_control = SpeakerControl(12, 13)
+        self.server.router.add_post("/tilt/x", self._tilt_x_handler)
+        self.server.router.add_post("/tilt/y", self._tilt_y_handler)
+        self.server.router.add_get("/tilt", self._get_tilt_handler)
 
     async def _tilt_x_handler(self, req: web.Request):
         """Handle tilting request around the x axis
@@ -162,12 +171,3 @@ class API:
                 x=self.speaker_control.x_angle,
                 y=self.speaker_control.y_angle
             )), content_type='application/json')
-
-    def _create_api(self):
-        """Register different routes for the API
-        """
-
-        self.speaker_control = SpeakerControl(12, 13)
-        self.server.router.add_post("/tilt/x", self._tilt_x_handler)
-        self.server.router.add_post("/tilt/y", self._tilt_y_handler)
-        self.server.router.add_get("/tilt", self._get_tilt_handler)

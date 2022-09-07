@@ -17,7 +17,6 @@ Modulator::Modulator(uint32_t input_fs, uint32_t input_samples, uint32_t output_
 
 float Modulator::AM(float signal, float t, float U0, float m) {
   float c = sin(carrier * t);
-
   return U0 * (1 + m * signal) * c;
 }
 

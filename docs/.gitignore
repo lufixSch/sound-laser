@@ -1,3 +1,6 @@
-build
+build/*
+
 src/assets/privat/*.png
 __pycache__/
+
+!build/*.pdf

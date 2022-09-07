@@ -29,16 +29,11 @@ void Speaker::configureDAC(char config) {
 }
 
 void Speaker::run() {
-  long long diff;
-  uint64_t delay = (uint64_t)(1000000000 / sampling_rate);
-
   std::cout << "Run Speaker Loop with a max delay of " << delay << "\n";
 
+  long long diff;
+  uint64_t delay = (uint64_t)(1000000000 / sampling_rate);
   char data[WORD_SIZE] = { conf, 0x00, 0x00 };
-
-  Table* table = Table::instance();
-
-  auto entry = std::chrono::high_resolution_clock::now();
   auto start = std::chrono::high_resolution_clock::now();
 
   while (true) {
@@ -46,10 +41,7 @@ void Speaker::run() {
     data[1] = (char)(sample >> 4);
     data[2] = (char)((sample & 0x000F) << 4);
 
-    // spi.write(data, WORD_SIZE);
-    auto timestamp
-        = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - entry);
-    table->addSignal(sample, timestamp);
+    spi.write(data, WORD_SIZE);
 
     auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start)
                     .count();
@@ -57,11 +49,7 @@ void Speaker::run() {
     auto sleep = (delay - diff_abs) / 1000;
 
     bcm2835_delayMicroseconds(sleep);
-    table->addDiff(
-        std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - start)
-            .count());
     start = std::chrono::high_resolution_clock::now();
-    table->nextSignal();
   }
 }
 
