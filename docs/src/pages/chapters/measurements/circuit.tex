@@ -52,7 +52,7 @@ Figures \ref{fig:meas:circ:amp_sin} shows a $40kHz$ sine wave amplified by the c
 
 \subsection{DAC}\label{sec:meas:circuit:dac}
 
-As of the writing of this thesis this component did not work properly. As mentioned in the Datasheet the DAC takes the signal structure shown in Figure \ref{fig:meas:circ:dac_spi}. When the 4 config bits are set to $0011$ the output of the DAC is updated with the new value. The DAC also supports a power down mode by sending $0100$. The power down can be recognized by observing the output of the reference voltage. In power down mode the pin is set to high impedance and slowly falls to $0V$.\cite{linear_technology_ltc2640_2017}
+During the writing of this thesis this component turned out to not work properly. As mentioned in the Datasheet the DAC takes the signal structure shown in Figure \ref{fig:meas:circ:dac_spi}. When the 4 config bits are set to $0011$ the output of the DAC is updated with the new value. The DAC also supports a power down mode by sending $0100$. The power down can be recognized by observing the output of the reference voltage. In power down mode the pin is set to high impedance and slowly falls to $0V$.\cite{linear_technology_ltc2640_2017}
 %
 \begin{figure}
   \centering

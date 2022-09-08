@@ -8,13 +8,13 @@
 %  \item Bandwith
 %\end{enumerate}
 %
-Modulation in electronics describes the process of altering parameters of a carrier wave depending on an input signal. This will transfer the frequency of the input signal so it can be transmitted for example via radio wave. The receiver can then demodulate the signal to retrieve the original.
+Modulation in electronics describes the process of altering parameters of a carrier wave depending on an input signal. This will transfer the frequency of the input signal so it can be transmitted for example via radio wave. The receiver further demodulates the signal to retrieve the original one.\cite{netzberger_kommunikationstechnologie_2021-1}
 
 \subsection{Modulation Techniques}
 
 \subsubsection*{AM}
 With the amplitude modulation the amplitude of the carrier signal $c(t)$ is changed depending on the modulating signal $s(t)$. The modulation depth $m$ defines to which grade the amplitude is modified. With the parameter $U_0$ the offset of the modulating signal can be changed.\p
-The AM is generally defined as follows:
+The AM is generally defined as follows:\cite{netzberger_kommunikationstechnologie_2021-1}
 %
 \begin{align}
   AM(t) &= U_0 \cdot [1 + m \cdot s(t)] \cdot c(t)
@@ -29,7 +29,7 @@ Usually the carrier signal is a sine or cosine wave with the carrier frequency $
 \subsubsection*{FM}
 %
 Using frequency modulation the frequency of the carrier signal $c(t, f)$ is changed by the modulating signal $s(t)$. The modulation depth $m$ defines to which grade the frequency is modified. With the parameter $U_0$ the amplitude of the carrier is defined.\p
-The FM is generally defined as follows:
+The FM is generally defined as follows:\cite{netzberger_kommunikationstechnologie_2021-1}
 %
 \begin{align}
   FM(t) &= U_0 \cdot c(t, 2 \pi \cdot f_c \cdot [1 + m \cdot s(t)])\pmath
@@ -38,9 +38,9 @@ The FM is generally defined as follows:
 
 \subsection{Demodulation}
 
-In order to recreate audible sound from the modulated signal it has to be demodulated. In the case of a parametric array non-linear behaviour of the air leads to the demodulation of AM as well as FM signals.\p
+In order to recreate audible sound from the modulated signal it has to be demodulated. In the case of a parametric array inhomogeneous behaviour of a soundwave leads to the demodulation of AM as well as FM signals.\p
 %
-In linear acoustics it is presumed, that sound waves don't interact with each other but just superimpose on each. However in reality, when two sound waves collide some local temperaturechanges occur resulting in an inhomogene transmissionmedium. Therefore if two waves spread into the same direction their propagation is affected by each other. The resulting wave is described as an inhomogeneous wave equation by Westervelt (Equation \ref{eq:theory:mod:westervelt}).\cite{westervelt_parametric_1963}\cite{yoneyama_audio_1983}
+In linear acoustics it is presumed, that sound waves don't interact but just superimpose on each other. However in reality, when two sound waves collide, local changes in temperature occur resulting in an inhomogene behaviour of the transmission medium. Therefore, if two waves spread into the same direction their propagation is affected by each other. The resulting wave is described as an inhomogeneous wave equation by Westervelt (equation \ref{eq:theory:mod:westervelt}).\cite{westervelt_parametric_1963}\cite{yoneyama_audio_1983}
 %
 \begin{align}
   \triangledown^2 p_s - \frac{1}{c_0^2} \cdot \frac{\partial^2 p_s}{\partial t^2} & = - p_0 \frac{\partial q}{\partial t}\label{eq:theory:mod:westervelt}\pmath
@@ -58,7 +58,7 @@ Considering equation \ref{eq:theory:mod:am} the sound pressure of an AM signal c
   p_1(t, r) &= p_0 e^{- \alpha r} \cdot \left[1 + m \cdot s\left(t - \frac{r}{c_0}\right)\right] \cdot \cos \left(2 \pi \cdot f_c \cdot \left[t - \frac{r}{c_0}\right]\right)\label{eq:theory:mod:am_pressure_radius}
 \end{align}
 %
-$p_0$ is the initial pressure, $r$ is the distance from the speaker and $e^{- \alpha r}$ describes the damping of the wave over this distance.\p
+$p_0$ is the initial pressure, $r$ is the distance from the speaker and $e^{- \alpha r}$ describes the damping of the wave along this distance.\p
 $p_1$ is now inserted into equation \ref{eq:theory:mod:westervelt_q}.
 %
 \begin{align}
@@ -73,7 +73,7 @@ As the focus of the demodulation is audible sound all signals in the ultrasonic 
   q &= \frac{\beta p_0^2}{\rho_0^2 c_0^4} e^{ - 2 \alpha r} \cdot \cfrac{\partial }{\partial t} \left[1 + m \cdot s\left(t - \frac{r}{c_0}\right)\right]^2
 \end{align}
 %
-If this solution is now inserted into equation \ref{eq:theory:mod:westervelt} it can be solved for $p_s$. The result is known under the \cite[Berktay far-field solution]{bai_analysis_2012}
+If this solution is now inserted into equation \ref{eq:theory:mod:westervelt} it can be solved for $p_s$. The result is known under the Berktay far-field solution\cite{bai_analysis_2012}.
 %
 \begin{align}
   p_s(t) = \frac{\beta p_0^2 S}{16 \pi \rho_0^2 c_0^4 \alpha_0 r} \frac{\partial^2}{\partial t^2} E^2(t - \frac{r}{c_0})\label{eq:theory:mod:berktay}
@@ -178,7 +178,7 @@ Using the same approach as with the AM signal, the demodulation of the FM signal
 \subsubsection*{AM}
 
 The bandwith calculation of an amplitude modulated signal is straightforward as the modulation just creates an upper and lower sideband at $f_c \pm f_s$.\cite{netzberger_kommunikationstechnologie_2021-1} Where $f_c$ is the carrier frequency and $f_s$ is the signal frequency.\p
-As the highest tone a human can hear lies at about $20kHz$, this would result in a maximum bandwith of $f_c \pm 20kHz$. With a carrier frequency of $40kHz$ the highest frequency of the modulated signal would lie at $60kHz$. Reducing the highest tone to $8kHz$, which is enough for most audio would reduce this value to $48kHz$.
+As the highest tone noticeable by a human ear is at about $20kHz$, this would result in a maximum bandwith of $f_c \pm 20kHz$. With a carrier frequency of $40kHz$ the highest frequency of the modulated signal would lie at $60kHz$. Reducing the highest tone to $8kHz$, which is sufficient for most types of audio would reduce this value to $48kHz$.
 
 \subsubsection*{FM}
 

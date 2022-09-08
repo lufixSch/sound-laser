@@ -15,8 +15,8 @@
 Beamforming is a concept used for emitting and receiving signals. It describes the technique of bundling a signal so it is only transmitted into or received from one direction. Because in this thesis beamforming is used with a speaker the following explanation will use an emitter as example but the calculations would work in exactly the same way for a receiver.\cite{van_veen_beamforming_1988}\p
 %
 In order to produce the beamforming effect for one dimension you need multiple emitters arranged in one line.
-If the receiver is far enough away from the emitters the directional vector of the waves can be viewed as parallel. When the receiver is positioned directly in front of the emitters (\(0^\circ\)) all waves reach it at the same time (See figure \ref{fig:theory:beam:array_straight}).
-When the position of the receiver is rotated (\(\pm \varphi^\circ\)) the waves have to travel different distances (See figure \ref{fig:theory:beam:array_angle}). Therefore they reach the receiver with a phase shift. Depending of the position of the receiver and distance of the emitters the waves will cancel each other out.
+If the receiver is far enough away from the emitters the directional vector of the waves can be viewed as parallel. When the receiver is positioned directly in front of the emitters (\(0^\circ\)) all waves reach it at the same time (see figure \ref{fig:theory:beam:array_straight}).
+When the position of the receiver is rotated (\(\pm \varphi^\circ\)) the waves have to travel different distances (See figure \ref{fig:theory:beam:array_angle}). Therefore, they reach the receiver with a phase shift. Depending oo the position of the receiver and distance of the emitters the waves will cancel each other out.
 %
 \begin{figure}
   \centering
@@ -29,13 +29,15 @@ When the position of the receiver is rotated (\(\pm \varphi^\circ\)) the waves h
   \caption{Phased array with the receiver positioned at $25^\circ$}\label{fig:theory:beam:array_angle}
 \end{figure}
 \p
-The difference in travel distance of two waves depending on the angle \(\varphi\) can be described as follows. \(d\) describes the spacing between the emitters.
+The difference in travel distance of two waves depending on the angle \(\varphi\) can be described as follows:
 %
 \begin{align}
   l(\varphi) &= \sin \varphi \cdot d
 \end{align}
 %
-Given the connection between distance $d$, time $t$ and velocity $v$. This equation can be used to calculate the phaseshift $\Phi$ between those two waves.
+Where \(d\) describes the spacing between the emitters.\newpage
+%
+\noindent Given the connection between distance $d$, time $t$, velocity $v$, wavelength $\lambda$ and frequency $f$, this equation can be used to calculate the phaseshift $\Phi$ between those two waves.\cite{elert_speed_2021}\cite{cassidy_understanding_2002}
 %
 \begin{align}
   t(\varphi)     &= \frac{l}{v} = \frac{d}{v} \sin \varphi \\[1em]
@@ -51,7 +53,7 @@ Equation \ref{eq:theory:beam:single_phaseshift} can also be used for a whole arr
 \end{align}
 %
 Given a set of two spherical emitter generating a cosine wave (\(s_e(t)\)), the received signal (\(s(t)\)) would look as shown in figure \ref{fig:theory:beam:time}.
-Figure \ref{fig:theory:beam:n2_d.5} displays the result in a polar diagram.\p
+Figure \ref{fig:theory:beam:n2_d.5} displays the result in a polar diagram.\cite{curtis_technology_uk_ltd_time_1998}\p
 %
 It can be observed, that the amplitude of the resulting signal is reduced the larger \(\varphi\) gets. Until both waves cancel each other out at \(90^\circ\).
 %
@@ -105,7 +107,7 @@ Figures \ref{fig:theory:beam:d} and \ref{fig:theory:beam:n2_d.5} show the beamfo
 %
 \subsection{Number of Emitters}
 
-Figure \ref{fig:theory:beam:num} shows the beamforming characteristics of a phased array with $2$, $5$ and $20$ emitters. The distance between the emitters is set to $\frac{1}{2} \lambda$. From the graphs can be observed, that by increasing the number of emitters the generated beam gets narrower. However a higher number of emitters also introduces new side lobes with a smaller amplitude. The amplitude of the side lobes decreases the larger the number of emitters.
+Figure \ref{fig:theory:beam:num} shows the beamforming characteristics of a phased array with $2$, $5$ and $20$ emitters. The distance between the emitters is set to $\frac{1}{2} \lambda$. From the graphs it can be observed, that by increasing the number of emitters the generated beam gets narrower. However a higher number of emitters also introduces new side lobes with a smaller amplitude. The amplitude of the side lobes decreases the larger the number of emitters gets.
 %
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.32\textwidth}
@@ -130,7 +132,7 @@ Figure \ref{fig:theory:beam:num} shows the beamforming characteristics of a phas
 \end{figure}
 %
 \subsection{Dispersion Characteristics of Emitters}
-For the calculations above the emitters are assumed to be isotropic radiators. In the real world a speaker has some form of direction characteristic. The exact behaviour is highly dependent of the signal frequency. A higher frequency usually means more directivity.\cite{cox_frequency-dependent_2007}\cite{hill_frequency_2014}\p
+For the calculations above, the emitters are assumed to be isotropic radiators. In a real world scenario a speaker has some form of direction characteristic. The exact behaviour is highly dependent of the signal frequency. A higher frequency usually leads to more directivity.\cite{cox_frequency-dependent_2007}\cite{hill_frequency_2014}\p
 %
 %Figure \dots shows the dispersion characteristics of the ultrasonic transducer used in this project. This behavior can be modelled into equation \ref{eq:theory:beam:sig} as follows:
 %
