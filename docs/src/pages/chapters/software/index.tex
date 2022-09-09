@@ -16,7 +16,7 @@ Reading audio samples and modulating them is done in the class \lstcpp{AudioProc
   \caption{Sound playback sequence diagram}\label{fig:software:sound_sequence}
 \end{figure}
 \p
-The communication between threads is handlend with a queue. The implementation shown in listing \ref{lst:software:queue} makes the \lstcpp{std::queue} threadsafe by using a lock to access the underlying queue and also blocks the thread if no data is available. This is usefull, among other things, because there is no need to send data over SPI when no new sample is generated.\p
+The communication between threads is handlend with a queue. The implementation shown in listing \ref{lst:software:queue} makes the \lstcpp{std::queue} threadsafe by using a lock to access the underlying queue and also blocks the thread if no data is available. This is usefull, because there is no need to send data over SPI when no new sample is generated.\p
 %
 A hardware abstraction layer is used to separate logic and hardware interfaces.
 %
@@ -52,7 +52,7 @@ template <class T> class BlockingQueue : public queue<T> {
 
 \input{src/pages/chapters/software/audio-in.tex}
 \input{src/pages/chapters/software/modulation.tex}
-\input{src/pages/chapters/software/spi.tex}
+\input{src/pages/chapters/software/spi.tex}\clearpage
 
 \section{Speaker Movement}
 \input{src/pages/chapters/software/movement.tex}

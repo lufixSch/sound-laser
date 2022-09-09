@@ -12,23 +12,23 @@
 %\end{enumerate}
 
 Because the speaker will be used with a Raspberry Pi or microcontroller, it should be compatible with an input voltage of $5V$. In order to provide the $24V$ needed by the amplifier circuit a boost converter is used.\p
-In order to power the OpAmp and additional elements, the power supply should at least provide $200mA$. Apart from that, a higher switching frequency helps to reduce interferences at the speaker output.\p
+The power supply should at least provide $200mA$ so it can power the OpAmp and additional elements. Apart from that, a higher switching frequency helps to reduce interferences at the speaker output.\p
 %
-Considering those requirements the LM2735 boost converter was chosen. Because the power usage of the ultrasonic transducers was not clear in the beginning of this project the power supply provides up to $3A$ output current. The output voltage can be adjusted between $3V$ and $24V$.\cite{texas_instruments_lm2735-q1_2018}
+Considering those requirements the LM2735 boost converter was chosen. Because the power usage of the ultrasonic transducers was unknown in the beginning of this project the power supply provides up to $3A$ output current. The output voltage can be adjusted between $3V$ and $24V$.\cite{texas_instruments_lm2735-q1_2018}
 
 \subsection{Circuit}
 
-Figure \ref{fig:pcb:power_circuit} shows the circuit of the power supply. The feedback was designed for using the equation given in the datasheet.
-Note that \comp{R1} and \comp{R2} are switched compared to the circuit in the datasheet.
+Figure \ref{fig:pcb:power_circuit} shows the circuit of the power supply. The feedback was designed by using the equation given in the datasheet.
+Note that in equation \ref{eq:pcb:power:vout} \comp{R1} and \comp{R2} are switched compared to the circuit in the datasheet.
 %
 \begin{align}
-  R_1 &= \left(\frac{V_{out}}{V_{ref}} - 1\right) \cdot R_2
+  R_1 &= \left(\frac{V_{out}}{V_{ref}} - 1\right) \cdot R_2\label{eq:pcb:power:vout}
   &\mathrm{with~} V_{ref} = 1.255V,~V_{out} = 24V
 \end{align}
 %
 The dimensions of \comp{L1} as well as the capacity \comp{C7} and the diode \comp{D1} were taken from the examples in the datasheet.
 %
-\begin{figure}
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{src/assets/pictures/circuit/powersupply_circuit.png}
   \caption{Powersupply circuit design}\label{fig:pcb:power_circuit}

@@ -2,7 +2,7 @@
 
 \subsubsection*{SPI Interface}
 
-As described before the sampling rate of the SPI output should be at least $100kHz$. This means every $10us$ one packet has to be submitted. The Linux OS for the Raspberry Pi provides a SPI implementation which can be accessed via C++ or Python. After putting the SPI write function into a loop without any pause or other calculations in between it became noticeable that this implementation is only able to send one package every $50\mu s$ to $80\mu s$. This problem can be solved with the \textbf{bcm2835} C library.\cite{mccauley_bcm2835_nodate} This library bypasses the linux drivers and directly accesses the bcm2835 SOC from the Raspberry Pi. It provides interfaces for GPIO pins, PWM and SPI as well as \lstcpp{bcm2835_delayMicroseconds()} function which is much more accurate than the builtin C++ functions.\p
+As described before the sampling rate of the SPI output should be at least $100\,kHz$. This means every $10\,\mu s$ one packet has to be submitted. The Linux OS for the Raspberry Pi provides a SPI implementation which can be accessed via C++ or Python. After putting the SPI write function into a loop without any pause or other calculations in between it became noticeable that this implementation is only able to send one package every $50\,\mu s$ to $80\,\mu s$. This problem can be solved with the \textbf{bcm2835} C library.\cite{mccauley_bcm2835_nodate} This library bypasses the linux drivers and directly accesses the bcm2835 SOC from the Raspberry Pi. It provides interfaces for GPIO pins, PWM and SPI as well as \lstcpp{bcm2835_delayMicroseconds()} function which is much more accurate than the builtin C++ functions.\p
 %
 The SPI configuration is put into the HAL class \lstcpp{SPI} (See listing \ref{lst:software:spi:conf})
 %
@@ -15,7 +15,7 @@ SPI::SPI() {
 
   bcm2835_spi_setBitOrder(BCM2835_SPI_BIT_ORDER_MSBFIRST);
   bcm2835_spi_setDataMode(BCM2835_SPI_MODE0);
-  bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_64); // BCM2835_SPI_CLOCK_DIVIDER_16);
+  bcm2835_spi_setClockDivider(BCM2835_SPI_CLOCK_DIVIDER_64);
   bcm2835_spi_chipSelect(BCM2835_SPI_CS0);
   bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);
 }
@@ -70,7 +70,7 @@ void Speaker::run() {
 %
 \subsubsection*{Linux Realtime}
 
-Because the signal is split into a fixed sampling rate, timing is really important for this task. As described before this is improved by using \lstcpp{bcm2835_delayMicroseconds()} over builtin C++ sleep functions. Nevertheless, because of the nature of Linux scheduling, it can not be quaranteed that the thread will pause exactly the given delay every time. Linux scheduling is fair. This means every process gets its time on the CPU. If a process was paused and needs to wake up again, it has to wait for the current process on the CPU to finish its time slice. For time relevant processes Linux provides a feature to bypass this behaviour. A process can be given a scheduling priority. When this process wants to wake up and a process with a lower or no priority uses the CPU it is paused immediately and the new proccess does not need to wait. This still does not quarantee a fixed sleep time because there could always be a task with higher priority but it reduces the risk of waiting.\cite{faschingbauer_realtime_nodate}\p
+Because the signal is split into a fixed sampling rate, timing is really important for this task. As described before this is improved by using \lstcpp{bcm2835_delayMicroseconds()} over builtin C++ sleep functions. Nevertheless, because of the nature of Linux scheduling, it can not be quaranteed that the thread will pause exactly the given delay every time. Linux scheduling is fair. This means every process gets its time on the CPU. If a process was paused and needs to wake up again, it has to wait for the current process on the CPU to finish its time slice. For time relevant processes Linux provides a feature to bypass this behaviour. A process can be given a scheduling priority. When this process wants to wake up and a process with lower or no priority uses the CPU it is paused immediately and the new proccess does not need to wait. This still does not quarantee a fixed sleep time because there could always be a task with higher priority but it reduces the risk of waiting.\cite{faschingbauer_realtime_nodate}\p
 %
 The scheduling priority can be changed using \lstcpp{pthread_setschedparam()} from the \textbf{PThread} library (Listing \ref{lst:software:spi:rt}). It takes a priority between $1$ and $99$, where $99$ is the highest priority and $1$ is the lowest. A priority of $1$ or $2$ is usually sufficient because most processes do not have any scheduling priority.\cite{noauthor_pthread_setschedparam3_nodate}
 %

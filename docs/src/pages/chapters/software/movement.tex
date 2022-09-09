@@ -1,6 +1,6 @@
 \subsection{Speaker Control}
 
-The GPIO Pins of the Raspberry Pi can be controlled in Python using the \textbf{GPIOZero} library. It provides a class \lstpython{servo} which takes the pin to which the servo is connected. The servo can then be positoned by setting \lstpython{servo.value} to a value between $0$ and $1$. Note that \lstpython{servo} works with every pin but just pin \textbf{12} and \textbf{13} support hardware pins. For the other pins the PWM will be created by software. This variant usually creates some jitter which makes the servo tremble. To make sure the hardware PWM is used for pin \textbf{12} and \textbf{13} the pin factory should be changed to \lstpython{PiGPIOFactory} (Listing \ref{lst:software:mov:pin_factory}).\cite{nuttall_gpio_2021}
+The movement of the speaker is controlled by two servo motors which are connected to the GPIO Pins of the Raspberry Pi. The GPIO Pins can be controlled in Python using the \textbf{GPIOZero} library\cite{nuttall_gpio_2021} . It provides a class \lstpython{servo} which takes the pin to which the servo is connected. The servo can then be positoned by setting \lstpython{servo.value} to a value between $0$ and $1$. Note that \lstpython{servo} works with every pin but just pin \textbf{12} and \textbf{13} support hardware PWM. For the other pins the PWM will be created by software. This variant usually generates some jitter which makes the servo tremble. To make sure the hardware PWM is used for pin \textbf{12} and \textbf{13} the pin factory should be changed to \lstpython{PiGPIOFactory} (Listing \ref{lst:software:mov:pin_factory}).\cite{nuttall_gpio_2021}
 %
 \begin{mdframed}
 \begin{lstlisting}[language=Python, caption=Changing the pin factory, label=lst:software:mov:pin_factory]
@@ -56,12 +56,12 @@ def tilt_x(self, angle: float):
 
 \subsection{Control Interface}
 %
-The control interface consists of a website where a user can control the tilting of the speaker and an API over which the speaker is actually controlled. Both are created in Python with the \textbf{aiohttp} library.\cite{noauthor_aiohttp_nodate}
+The control interface consists of a website where a user can set the tilting angle of the speaker and an API over which the speaker is actually controlled. Both are created in Python with the \textbf{aiohttp} library.\cite{noauthor_aiohttp_nodate}
 
 \subsubsection*{API}
 
 The API is generated in the class \lstpython{API}. It registers the routes \textit{tilt/x}, \textit{tilt/y} and \textit{tilt} as shown in listing \ref{lst:software:mov:api}.
-\textit{tilt/x} and \textit{tilt/y} are used to post a new titling angle to the server. \textit{tilt} returns the current tilting position around the x- and y-axis in JSON format.\p
+\textit{tilt/x} and \textit{tilt/y} are used to post a new titling angle to the server. \textit{tilt} returns the current tilting position around the x- and y-axis in JSON format.
 %
 \begin{mdframed}
 \begin{lstlisting}[language=Python, caption=Control interface API, label=lst:software:mov:api]
@@ -80,7 +80,6 @@ class API:
       try:
           content = json.loads(await req.text())
           angle = content["value"]
-          print(angle)
           self.speaker_control.tilt_x(angle)
 
           res = dict(success=True, message="")
@@ -94,7 +93,6 @@ class API:
       try:
           content = json.loads(await req.text())
           angle = content["value"]
-          print(angle)
           self.speaker_control.tilt_y(angle)
 
           res = dict(success=True, message="")
@@ -117,7 +115,7 @@ class API:
 
 Even though the API can be used to control the speaker programmatically a website provides an easy interface for manual inputs.\p
 %
-In order to publish a website,  a webbrowser needs to be configured. This is done in the class \lstpython{Webserver}. As shown in listing \ref{lst:software:mov:webserver} the constructor takes a reference to the \textbf{aiohttp} Application and a path to the directory containing the \textit{.html}, \textit{.js} and \textit{.css} files. The webserver checks all files contained in this directory and registers new routes for each file so they can be accessed from a webbrowser.\p
+In order to publish a website, a webserver needs to be configured. This is done in the class \lstpython{Webserver}. As shown in listing \ref{lst:software:mov:webserver} the constructor takes a reference to the \textbf{aiohttp} Application and a path to the directory containing the \textit{.html}, \textit{.js} and \textit{.css} files. The webserver checks all files contained in this directory and registers new routes for each file so they can be accessed from a webbrowser.
 %
 \begin{mdframed}
 \begin{lstlisting}[language=Python, caption=Minimal python webserver, label=lst:software:mov:webserver]
@@ -130,7 +128,6 @@ class Webserver:
   def _create_webserver(self):
       files = os.listdir(self.web_path)
       routes = self._create_routes(files)
-
       for route in routes:
           self.server.router.add_get(f"/{route}", self._webadress_handler)
 
@@ -146,10 +143,8 @@ class Webserver:
       routes = {}
       for file in files:
           route = file
-
           split_file = os.path.splitext(file)
           content_type = f"text/{split_file[1].lstrip('.')}"
-
           if split_file[1] == ".html":
               if split_file[0] == "index":
                   route = ""
@@ -160,12 +155,11 @@ class Webserver:
 
           routes[route] = (file, content_type)
 
-      print(routes)
-
       return routes
 \end{lstlisting}
 \end{mdframed}
 %
+\newpage\noindent
 The design of the website is shown in figure \ref{fig:software:mov:website}. When the site is loaded it uses the \textit{tilt} route to get the current position of the speaker. Now the two text fields can be used to enter a new angle for rotation around the x- or y-axis. Clicking on the \textbf{move} button will post this input to \textit{tilt/x} and \textit{tilt/y} respectively.
 %
 \begin{figure}[ht]

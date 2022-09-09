@@ -16,7 +16,7 @@ Beamforming is a concept used for emitting and receiving signals. It describes t
 %
 In order to produce the beamforming effect for one dimension you need multiple emitters arranged in one line.
 If the receiver is far enough away from the emitters the directional vector of the waves can be viewed as parallel. When the receiver is positioned directly in front of the emitters (\(0^\circ\)) all waves reach it at the same time (see figure \ref{fig:theory:beam:array_straight}).
-When the position of the receiver is rotated (\(\pm \varphi^\circ\)) the waves have to travel different distances (See figure \ref{fig:theory:beam:array_angle}). Therefore, they reach the receiver with a phase shift. Depending oo the position of the receiver and distance of the emitters the waves will cancel each other out.
+When the position of the receiver is rotated (\(\pm \varphi^\circ\)) the waves have to travel different distances (See figure \ref{fig:theory:beam:array_angle}). Therefore, they reach the receiver with a phase shift. Depending on the position of the receiver and distance of the emitters the waves will cancel each other out.
 %
 \begin{figure}
   \centering
@@ -32,12 +32,12 @@ When the position of the receiver is rotated (\(\pm \varphi^\circ\)) the waves h
 The difference in travel distance of two waves depending on the angle \(\varphi\) can be described as follows:
 %
 \begin{align}
-  l(\varphi) &= \sin \varphi \cdot d
+  l(\varphi) &= \sin \varphi \cdot d\label{eq:theory:beam:dist}
 \end{align}
 %
 Where \(d\) describes the spacing between the emitters.\newpage
 %
-\noindent Given the connection between distance $d$, time $t$, velocity $v$, wavelength $\lambda$ and frequency $f$, this equation can be used to calculate the phaseshift $\Phi$ between those two waves.\cite{elert_speed_2021}\cite{cassidy_understanding_2002}
+\noindent Given the connection between distance $d$, time $t$, velocity $v$, wavelength $\lambda$ and frequency $f$, equation \ref{eq:theory:beam:dist} can be used to calculate the phaseshift $\Phi$ between those two waves.\cite{elert_speed_2021}\cite{cassidy_understanding_2002}
 %
 \begin{align}
   t(\varphi)     &= \frac{l}{v} = \frac{d}{v} \sin \varphi \\[1em]
@@ -52,8 +52,15 @@ Equation \ref{eq:theory:beam:single_phaseshift} can also be used for a whole arr
   \Phi(\varphi, n) &= n \cdot \frac{2\pi}{\lambda} d \cdot \sin \varphi
 \end{align}
 %
-Given a set of two spherical emitter generating a cosine wave (\(s_e(t)\)), the received signal (\(s(t)\)) would look as shown in figure \ref{fig:theory:beam:time}.
-Figure \ref{fig:theory:beam:n2_d.5} displays the result in a polar diagram.\cite{curtis_technology_uk_ltd_time_1998}\p
+Given an array of $N$ spherical emitter generating a cosine wave (\(s_e(t)\)), the received signal (\(s(t)\)) would be the sum of all waves with their coresponding phaseshift (equation \ref{eq:theory:beam:sig_sum}).\cite{curtis_technology_uk_ltd_time_1998}
+%
+\begin{align}
+  s_e(t, \varphi, n) = \cos (\omega t + n \cdot \frac{2\pi}{\lambda} d \cdot \sin \varphi )\label{eq:theory:beam:sig}\\[1em]
+  s(t, \varphi) = \sum_{n = 0}^{N - 1} s_e(t, \varphi, n)\label{eq:theory:beam:sig_sum}
+\end{align}
+%
+For an array of two emitters the signals would look as shown in figure \ref{fig:theory:beam:time}.
+Figure \ref{fig:theory:beam:n2_d.5} displays the resulting signal power in a polar diagram.\cite{curtis_technology_uk_ltd_time_1998}\p
 %
 It can be observed, that the amplitude of the resulting signal is reduced the larger \(\varphi\) gets. Until both waves cancel each other out at \(90^\circ\).
 %
@@ -63,11 +70,6 @@ It can be observed, that the amplitude of the resulting signal is reduced the la
   \caption{Signals of two emitters in a phased array ($\varphi=45^\circ$)}
   \label{fig:theory:beam:time}
 \end{figure}
-%
-\begin{align}
-  s_e(t, \varphi, n) = \cos (\omega t + n \cdot \frac{2\pi}{\lambda} d \cdot \sin \varphi )\label{eq:theory:beam:sig}\\[1em]
-  s(t, \varphi) = \sum_{n = 0}^{N} s_e(t, \varphi, n)
-\end{align}
 %
 \begin{figure}
   \centering
@@ -81,7 +83,7 @@ The beamforming characteristics can easily be influenced by the distance between
 %As shown in equation \ref{eq:theory:beam:single_phaseshift} the phaseshift between two emitters depends on the distance between them. Therefore the beamforming characteristics can be easily influenced by this.
 The ideal distance is half of the wavelength of the transmitted signal. With this spacing the two waves cancel each other out at exactly $90^\circ$ as shown in figure \ref{fig:theory:beam:n2_d.5}.\p
 %
-Figures \ref{fig:theory:beam:d} and \ref{fig:theory:beam:n2_d.5} show the beamforming characteristics of a phased array with $2$ emitters and a distance of $\cfrac{1}{4}\lambda$, $\cfrac{1}{2}\lambda$, $\lambda$, and $2\lambda$. The graph shows that using a smaller distance than $\frac{1}{2} \lambda$ makes the beamforming effect slowly disappear while a higher distance introduces a side lobe at $\pm 90^\circ$. If the distance is further increased, the side lobes split up and a new one emerges at $\pm 90^\circ$.
+Figures \ref{fig:theory:beam:d} and \ref{fig:theory:beam:n2_d.5} show the beamforming characteristics of a phased array with $2$ emitters and a distance of $\cfrac{1}{4}\lambda$, $\cfrac{1}{2}\lambda$, $\lambda$, and $2\lambda$. The graph shows that using a smaller distance than $\frac{1}{2} \lambda$ makes the beamforming effect slowly disappear while a higher distance introduces side lobes at $\pm 90^\circ$. If the distance is further increased, the side lobes split up and new ones emerge at $\pm 90^\circ$.
 %
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.32\textwidth}

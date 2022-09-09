@@ -8,7 +8,7 @@
 %  \item Bandwith
 %\end{enumerate}
 %
-Modulation in electronics describes the process of altering parameters of a carrier wave depending on an input signal. This will transfer the frequency of the input signal so it can be transmitted for example via radio wave. The receiver further demodulates the signal to retrieve the original one.\cite{netzberger_kommunikationstechnologie_2021-1}
+Modulation in electronics describes the process of altering parameters of a carrier wave depending on an input signal. This will transfer the frequency of the input signal so it can be transmitted for example via radio wave. The receiver then demodulates the signal to retrieve the original one.\cite{netzberger_kommunikationstechnologie_2021-1}
 
 \subsection{Modulation Techniques}
 
@@ -178,7 +178,7 @@ Using the same approach as with the AM signal, the demodulation of the FM signal
 \subsubsection*{AM}
 
 The bandwith calculation of an amplitude modulated signal is straightforward as the modulation just creates an upper and lower sideband at $f_c \pm f_s$.\cite{netzberger_kommunikationstechnologie_2021-1} Where $f_c$ is the carrier frequency and $f_s$ is the signal frequency.\p
-As the highest tone noticeable by a human ear is at about $20kHz$, this would result in a maximum bandwith of $f_c \pm 20kHz$. With a carrier frequency of $40kHz$ the highest frequency of the modulated signal would lie at $60kHz$. Reducing the highest tone to $8kHz$, which is sufficient for most types of audio would reduce this value to $48kHz$.
+Thus, the highest tone perceivable by the human ear at about $20kHz$ results in a maximum bandwith of $f_c \pm 20kHz$. With a carrier frequency of $40kHz$ the highest frequency of the modulated signal would lie at $60kHz$. Reducing the highest tone to $8kHz$, which is sufficient for most types of audio, would reduce this value to $48kHz$.
 
 \subsubsection*{FM}
 
@@ -188,4 +188,4 @@ In theory the frequency spectrum of a frequency modulated signal is infinite wit
   B =& 2 (\triangle f + f_s) &\textrm{with~} \triangle f = m \cdot f_c
 \end{align}
 %
-With a modulation depth of $0.05$, a carrier frequency of $40kHz$ and a maximum signal frequency of $20kHz$ this would result in a bandwith of $44kHz$. With a maximum signal frequency of $8kHz$ this would be reduced to $20kHz$. The highest frequency of the modulated signal would therefore be $50kHz$.
+With a modulation depth of $0.05$, a carrier frequency of $40kHz$ and a maximum signal frequency of $20kHz$ the bandwith would be $44kHz$. Using a maximum signal frequency of $8kHz$ instead, reduces the bandwith to $20kHz$. The highest frequency of the modulated signal would therefore be $50kHz$.
